@@ -1,0 +1,40 @@
+{
+  "name": "canvas-for-storyline",
+  "version": "0.1.0",
+  "description": "Generate Obsidian Canvas files and an export-ready master note from a StoryLine project.",
+  "main": "main.js",
+  "type": "module",
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "node scripts/run-unit-tests.mjs",
+    "test:metadata": "node scripts/check-release-metadata.mjs",
+    "test": "npm run lint && npm run typecheck && npm run test:metadata && npm run test:unit",
+    "build": "node build.mjs --production",
+    "build:prod": "node build.mjs --production",
+    "build:prod:deploy": "node build.mjs --production --deploy",
+    "dev": "node build.mjs --watch",
+    "dev:deploy": "node build.mjs --watch --deploy"
+  },
+  "keywords": ["obsidian", "canvas", "storyline", "writing"],
+  "author": "Holger Kohlhoff",
+  "license": "GPL-3.0-or-later",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HKohlhoff/canvas-for-storyline.git"
+  },
+  "bugs": { "url": "https://github.com/HKohlhoff/canvas-for-storyline/issues" },
+  "homepage": "https://github.com/HKohlhoff/canvas-for-storyline#readme",
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.9.1",
+    "eslint-plugin-obsidianmd": "^0.4.2",
+    "globals": "^17.11.0",
+    "obsidian": "^1.13.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.68.0"
+  }
+}

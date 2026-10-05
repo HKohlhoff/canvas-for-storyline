@@ -1,0 +1,8 @@
+node_modules/
+main.js
+release/
+.test-build/
+data.json
+.DS_Store
+_local/
+.obsidian/

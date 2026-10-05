@@ -1,0 +1,11 @@
+{
+  "id": "canvas-for-storyline",
+  "name": "Canvas for StoryLine",
+  "version": "0.1.0",
+  "minAppVersion": "1.13.0",
+  "description": "Generate Canvas files and an export-ready master note from a StoryLine project.",
+  "author": "Holger Kohlhoff",
+  "authorUrl": "https://github.com/HKohlhoff",
+  "fundingUrl": "https://ko-fi.com/hokdev",
+  "isDesktopOnly": false
+}
