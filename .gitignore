@@ -6,3 +6,14 @@ data.json
 .DS_Store
 _local/
 .obsidian/
+!examples/demo-vault/.obsidian/
+!examples/demo-vault/.obsidian/community-plugins.json
+!examples/demo-vault/.obsidian/plugins/
+!examples/demo-vault/.obsidian/plugins/canvas-folding/
+!examples/demo-vault/.obsidian/plugins/canvas-folding/main.js
+!examples/demo-vault/.obsidian/plugins/canvas-folding/manifest.json
+!examples/demo-vault/.obsidian/plugins/canvas-folding/styles.css
+!examples/demo-vault/.obsidian/plugins/canvas-html-exporter/
+!examples/demo-vault/.obsidian/plugins/canvas-html-exporter/main.js
+!examples/demo-vault/.obsidian/plugins/canvas-html-exporter/manifest.json
+!examples/demo-vault/.obsidian/plugins/canvas-html-exporter/styles.css

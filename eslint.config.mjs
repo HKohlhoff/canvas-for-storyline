@@ -4,7 +4,14 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig(
-  globalIgnores([".test-build/**", "_local/**", "main.js", "node_modules/**", "release/**"]),
+  globalIgnores([
+    ".test-build/**",
+    "_local/**",
+    "examples/demo-vault/.obsidian/plugins/**/main.js",
+    "main.js",
+    "node_modules/**",
+    "release/**",
+  ]),
   { files: ["**/*.{js,mjs}"], languageOptions: { globals: globals.node } },
   ...obsidianmd.configs.recommended,
   {
@@ -19,7 +26,7 @@ export default defineConfig(
     }
   },
   {
-    files: ["build.mjs", "scripts/**/*.mjs"],
+    files: ["build.mjs", "eslint.config.mjs", "scripts/**/*.mjs"],
     rules: {
       "obsidianmd/hardcoded-config-path": "off",
       "obsidianmd/no-nodejs-modules": "off",

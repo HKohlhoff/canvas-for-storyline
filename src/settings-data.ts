@@ -3,11 +3,15 @@ import { normalizeVaultPath } from "./vault/path";
 
 export interface CanvasForStoryLineSettings {
   projectPath: string;
+  masterOutputPath: string;
+  createMasterWithCanvases: boolean;
   includedCategories: Record<StoryLineCategory, boolean>;
 }
 
 export const DEFAULT_SETTINGS: CanvasForStoryLineSettings = {
   projectPath: "",
+  masterOutputPath: "",
+  createMasterWithCanvases: true,
   includedCategories: {
     scenes: true,
     sceneNotes: true,
@@ -20,8 +24,11 @@ export function normalizeSettings(value: unknown): CanvasForStoryLineSettings {
   const candidate = isRecord(value) ? value : {};
   const categories = isRecord(candidate.includedCategories) ? candidate.includedCategories : {};
   const rawPath = typeof candidate.projectPath === "string" ? candidate.projectPath.trim() : "";
+  const rawMasterPath = typeof candidate.masterOutputPath === "string" ? candidate.masterOutputPath.trim() : "";
   return {
     projectPath: rawPath === "" ? "" : normalizeVaultPath(rawPath.replace(/^\/+|\/+$/g, "")),
+    masterOutputPath: rawMasterPath === "" ? "" : normalizeVaultPath(rawMasterPath.replace(/^\/+|\/+$/g, "")),
+    createMasterWithCanvases: readBoolean(candidate.createMasterWithCanvases, true),
     includedCategories: {
       scenes: readBoolean(categories.scenes, true),
       sceneNotes: readBoolean(categories.sceneNotes, true),

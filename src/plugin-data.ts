@@ -11,6 +11,9 @@ export interface ProjectOwnership {
 export interface CanvasForStoryLineData {
   settings: CanvasForStoryLineSettings;
   projects: Record<string, ProjectOwnership>;
+  ui: {
+    lastShownUpdateId: string;
+  };
 }
 
 export function normalizePluginData(value: unknown): CanvasForStoryLineData {
@@ -18,7 +21,15 @@ export function normalizePluginData(value: unknown): CanvasForStoryLineData {
   return {
     settings: normalizeSettings(candidate.settings ?? DEFAULT_SETTINGS),
     projects: normalizeProjects(candidate.projects),
+    ui: {
+      lastShownUpdateId: normalizeLastShownUpdateId(candidate.ui),
+    },
   };
+}
+
+function normalizeLastShownUpdateId(value: unknown): string {
+  if (!isRecord(value) || typeof value.lastShownUpdateId !== "string") return "";
+  return value.lastShownUpdateId.trim();
 }
 
 function normalizeProjects(value: unknown): Record<string, ProjectOwnership> {

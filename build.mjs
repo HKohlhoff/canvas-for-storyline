@@ -12,7 +12,7 @@ const releaseDir = "release";
 
 function syncArtifacts() {
   fs.mkdirSync(releaseDir, { recursive: true });
-  for (const file of ["main.js", "manifest.json"]) {
+  for (const file of ["main.js", "manifest.json", "styles.css"]) {
     fs.copyFileSync(file, path.join(releaseDir, file));
   }
   if (!deploy) return;
@@ -21,7 +21,7 @@ function syncArtifacts() {
     ? path.resolve(pluginsDir)
     : path.join(path.resolve(pluginsDir), pluginId);
   fs.mkdirSync(target, { recursive: true });
-  for (const file of ["main.js", "manifest.json"]) {
+  for (const file of ["main.js", "manifest.json", "styles.css"]) {
     fs.copyFileSync(path.join(releaseDir, file), path.join(target, file));
   }
   const marker = path.join(target, ".hotreload");
@@ -37,6 +37,7 @@ const context = await esbuild.context({
   format: "cjs",
   platform: "node",
   target: "es2021",
+  loader: { ".md": "text" },
   sourcemap: production ? false : "inline",
   minify: production,
   external: ["obsidian", "electron", ...builtinModules],

@@ -6,6 +6,8 @@ import { createGenerationPlan } from "../src/generation/plan/create";
 import { parseStoryLineProject, type StoryLineSourceDocument } from "../src/storyline/parser";
 
 const fixtureRoot = "tests/fixtures/storyline/Projekt-M";
+const demoProjectRoot = "examples/demo-vault/StoryLine/Märchenwald/Rotkäppchen";
+const demoCodexRoot = "examples/demo-vault/StoryLine/Märchenwald/Codex";
 
 test("parses realistic StoryLine categories and excludes Canvas output", () => {
   const documents = readMarkdownDocuments(fixtureRoot);
@@ -28,6 +30,38 @@ test("frontmatter type can classify a note outside a category folder", () => {
   assert.equal(project.elements[0]?.title, "Ada");
 });
 
+test("reads project, series, act, and chapter labels from StoryLine metadata", () => {
+  const project = parseStoryLineProject("StoryLine/Serie/Projekt M", [
+    {
+      path: "StoryLine/Serie/Projekt M/Projekt M.md",
+      content: [
+        "---",
+        "type: storyline",
+        "title: Projekt M",
+        "seriesId: Die Akademie",
+        "actLabels:",
+        '  "1": Mengen – Zugehörigkeit',
+        "actDescriptions:",
+        '  "1": Leere Menge beginnt ihre Reise.',
+        "chapterLabels:",
+        '  "1": Leerheit',
+        "chapterDescriptions:",
+        '  "1": Der Anfang der Geschichte.',
+        "---",
+      ].join("\n"),
+    },
+  ], { vaultName: "TestVault", seriesName: "Die Akademie", bookNumber: 1 });
+
+  assert.equal(project.name, "Projekt M");
+  assert.equal(project.vaultName, "TestVault");
+  assert.equal(project.seriesName, "Die Akademie");
+  assert.equal(project.bookNumber, 1);
+  assert.deepEqual(project.actLabels, { "1": "Mengen – Zugehörigkeit" });
+  assert.deepEqual(project.actDescriptions, { "1": "Leere Menge beginnt ihre Reise." });
+  assert.deepEqual(project.chapterLabels, { "1": "Leerheit" });
+  assert.deepEqual(project.chapterDescriptions, { "1": "Der Anfang der Geschichte." });
+});
+
 test("recognizes English StoryLine folders without frontmatter", () => {
   const project = parseStoryLineProject("Roman", [
     { path: "Roman/Scenes/Act 1/Scene.md", content: "# Scene" },
@@ -41,6 +75,18 @@ test("recognizes English StoryLine folders without frontmatter", () => {
     "characters", "locations", "sceneNotes", "scenes",
   ]);
   assert.equal(project.elements.some((element) => element.title === "Ignored"), false);
+});
+
+test("recognizes series-level Codex entries outside the project folder", () => {
+  const project = parseStoryLineProject("StoryLine/Serie/Projekt M", [
+    {
+      path: "StoryLine/Serie/Codex/Characters/Agent M.md",
+      content: "---\ntype: character\nname: Agent M\n---\n",
+    },
+  ]);
+
+  assert.equal(project.elements[0]?.category, "characters");
+  assert.equal(project.elements[0]?.sourcePath, "StoryLine/Serie/Codex/Characters/Agent M.md");
 });
 
 test("uses StoryLine name fields for codex entries", () => {
@@ -69,6 +115,7 @@ test("preserves real StoryLine scene metadata and resolves its relationships", (
         "act: 2",
         "chapter: 10",
         "sequence: 3",
+        "subtitle: Eine unerwartete Begegnung",
         "characters:",
         '  - "[[Roman/Codex/Characters/Ada]]"',
         '  - "[[Berta]]"',
@@ -86,6 +133,57 @@ test("preserves real StoryLine scene metadata and resolves its relationships", (
   assert.equal(scene.notesFile, "Roman/SceneNotes/Begegnung - Notes.md");
   assert.deepEqual(scene.characters, ["Roman/Codex/Characters/Ada", "Berta"]);
   assert.deepEqual(scene.locations, ["Roman/Codex/Locations/Maschinenraum"]);
+  assert.equal(scene.description, "Eine unerwartete Begegnung");
+});
+
+test("stores hover descriptions directly on reference-layout file cards", () => {
+  const project = parseStoryLineProject("Roman", [
+    {
+      path: "Roman/Scenes/Act 1/01-01 Begegnung.md",
+      content: "---\ntype: scene\ntitle: Begegnung\nsubtitle: Der erste Blick\nact: 1\nchapter: 1\nsequence: 1\n---\n",
+    },
+    {
+      path: "Roman/Codex/Locations/Labor.md",
+      content: "---\ntype: location\nname: Labor\ndescription: Ein heller Raum\n---\n",
+    },
+  ]);
+  const scene = project.elements.find((element) => element.category === "scenes");
+  const location = project.elements.find((element) => element.category === "locations");
+  assert.equal(scene?.description, "Der erste Blick");
+  assert.equal(location?.description, "Ein heller Raum");
+
+  if (!scene || !location) assert.fail("expected scene and location");
+  project.chapterDescriptions["1"] = "Der Anfang der Geschichte.";
+  scene.locations = ["Labor"];
+  const plan = createGenerationPlan(project, {
+    scenes: true, sceneNotes: true, characters: true, locations: true,
+  });
+  const overview = plan.artifacts.find((artifact) => artifact.path.endsWith("Übersicht.canvas"));
+  const chapter = plan.artifacts.find((artifact) => artifact.path.endsWith(".canvas") && artifact.path.includes("Kapitel"));
+  assert.ok(overview);
+  assert.ok(chapter);
+  const overviewCanvas = JSON.parse(overview.content) as {
+    nodes: Array<CanvasTestNode>;
+  };
+  const chapterCanvas = JSON.parse(chapter.content) as {
+    nodes: Array<CanvasTestNode>;
+  };
+  assert.equal(
+    overviewCanvas.nodes.find((node) => node.file?.endsWith(".canvas"))?.label,
+    "Kapitel 1 · 1",
+  );
+  assert.equal(
+    overviewCanvas.nodes.find((node) => node.file?.endsWith(".canvas"))?.cfsDescription,
+    "Der Anfang der Geschichte.",
+  );
+  assert.equal(chapterCanvas.nodes.find((node) => node.file === scene.sourcePath)?.label, undefined);
+  assert.equal(chapterCanvas.nodes.find((node) => node.file === location.sourcePath)?.label, undefined);
+  const sceneFile = chapterCanvas.nodes.find((node) => node.file === scene.sourcePath);
+  const locationFile = chapterCanvas.nodes.find((node) => node.file === location.sourcePath);
+  assert.ok(sceneFile && locationFile);
+  assert.equal(sceneFile.cfsDescription, "Der erste Blick");
+  assert.equal(locationFile.cfsDescription, "Ein heller Raum");
+  assert.equal(chapterCanvas.nodes.find((node) => node.file?.endsWith("Übersicht.canvas"))?.label, "← Übersicht");
 });
 
 test("chapter Canvas contains selected StoryLine relations and connects them to the scene", () => {
@@ -115,10 +213,10 @@ test("chapter Canvas contains selected StoryLine relations and connects them to 
   const plan = createGenerationPlan(project, {
     scenes: true, sceneNotes: true, characters: true, locations: true,
   });
-  const chapter = plan.artifacts.find((artifact) => artifact.path.endsWith("/1.canvas"));
+  const chapter = plan.artifacts.find((artifact) => artifact.path.endsWith("/Roman - Kapitel 1 - 1.canvas"));
   assert.ok(chapter);
   const canvas = JSON.parse(chapter.content) as {
-    nodes: Array<{ id: string; type: string; file?: string }>;
+    nodes: Array<{ id: string; type: string; file?: string; label?: string }>;
     edges: Array<{ fromNode: string; toNode: string }>;
   };
   const nodeByFile = new Map(canvas.nodes.filter((node) => node.file).map((node) => [node.file, node.id]));
@@ -150,6 +248,38 @@ test("creates deterministic Canvas and master artifacts from the StoryLine fixtu
   assert.equal(first.artifacts.some((artifact) => artifact.path.endsWith("/Canvas/Master.md")), true);
 });
 
+test("demo vault exercises every exported category and StoryLine scene status", () => {
+  const documents = [
+    ...readMarkdownDocuments(demoProjectRoot),
+    ...readMarkdownDocuments(demoCodexRoot),
+  ];
+  const project = parseStoryLineProject(demoProjectRoot, documents, {
+    vaultName: "Canvas for StoryLine Demo",
+    seriesName: "Geschichten aus dem Märchenwald",
+    bookNumber: 1,
+  });
+
+  assert.equal(project.name, "Rotkäppchen");
+  assert.equal(project.bookNumber, 1);
+  assert.deepEqual(new Set(project.elements.map((element) => element.category)), new Set([
+    "scenes", "sceneNotes", "characters", "locations",
+  ]));
+  assert.deepEqual(
+    new Set(project.elements.filter((element) => element.category === "scenes").map((element) => element.status)),
+    new Set(["idea", "outlined", "draft", "written", "revised", "final"]),
+  );
+  assert.equal(project.elements.filter((element) => element.category === "scenes").length, 6);
+  assert.equal(project.elements.filter((element) => element.category === "sceneNotes").length, 6);
+  assert.equal(project.elements.filter((element) => element.category === "characters").length, 5);
+  assert.equal(project.elements.filter((element) => element.category === "locations").length, 4);
+
+  const plan = createGenerationPlan(project, {
+    scenes: true, sceneNotes: true, characters: true, locations: true,
+  });
+  assert.equal(plan.artifacts.filter((artifact) => artifact.path.endsWith(".canvas")).length, 7);
+  assert.equal(plan.artifacts.some((artifact) => artifact.path.endsWith("/Canvas/Master.md")), true);
+});
+
 function readMarkdownDocuments(root: string): StoryLineSourceDocument[] {
   return walk(root)
     .filter((file) => file.endsWith(".md"))
@@ -161,4 +291,17 @@ function walk(directory: string): string[] {
     const entryPath = path.join(directory, entry.name);
     return entry.isDirectory() ? walk(entryPath) : [entryPath];
   });
+}
+
+interface CanvasTestNode {
+  type: string;
+  file?: string;
+  label?: string;
+  text?: string;
+  color?: string;
+  cfsDescription?: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }

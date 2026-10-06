@@ -1,0 +1,11 @@
+{
+  "id": "canvas-folding",
+  "name": "Canvas Folding",
+  "version": "1.2.8",
+  "minAppVersion": "1.13.0",
+  "description": "Collapse and expand hierarchical branches in Canvas.",
+  "author": "Holger Kohlhoff",
+  "authorUrl": "https://github.com/HKohlhoff",
+  "fundingUrl": "https://ko-fi.com/hokdev",
+  "isDesktopOnly": false
+}

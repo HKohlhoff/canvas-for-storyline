@@ -1,7 +1,7 @@
 {
   "name": "canvas-for-storyline",
-  "version": "0.1.0",
-  "description": "Generate Obsidian Canvas files and an export-ready master note from a StoryLine project.",
+  "version": "0.8.0",
+  "description": "Turn StoryLine writing projects into connected Obsidian Canvas books and export-ready master notes.",
   "main": "main.js",
   "type": "module",
   "engines": { "node": ">=20.19.0" },
@@ -17,7 +17,7 @@
     "dev": "node build.mjs --watch",
     "dev:deploy": "node build.mjs --watch --deploy"
   },
-  "keywords": ["obsidian", "canvas", "storyline", "writing"],
+  "keywords": ["obsidian", "canvas", "storyline", "writing", "publishing"],
   "author": "Holger Kohlhoff",
   "license": "GPL-3.0-or-later",
   "private": true,

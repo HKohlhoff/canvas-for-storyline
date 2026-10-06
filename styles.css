@@ -1,0 +1,54 @@
+.cfs-description-tooltip {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-s);
+  color: var(--text-normal);
+  display: none;
+  font-size: var(--font-ui-small);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-normal);
+  max-width: min(520px, calc(100vw - 24px));
+  padding: 10px 12px;
+  pointer-events: none;
+  position: fixed;
+  white-space: normal;
+  z-index: var(--layer-popover, 1000);
+}
+
+.cfs-description-tooltip.is-visible {
+  display: block;
+}
+
+.canvas-for-storyline-documentation-modal {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.canvas-for-storyline-documentation-modal .modal-content {
+  max-height: min(72vh, 760px);
+  overflow-y: auto;
+}
+
+.canvas-for-storyline-documentation-actions {
+  background: var(--background-primary);
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0 4px;
+  position: sticky;
+}
+
+.canvas-node-content a[href^="cfs-color://"] {
+  pointer-events: none;
+  padding-inline-end: 0;
+  background-image: none !important;
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+}
+
+.canvas-node-content a[href="cfs-color://idea"] { color: #9e9e9e; }
+.canvas-node-content a[href="cfs-color://outlined"] { color: #2196f3; }
+.canvas-node-content a[href="cfs-color://draft"] { color: #ff9800; }
+.canvas-node-content a[href="cfs-color://written"] { color: #4caf50; }
+.canvas-node-content a[href="cfs-color://revised"] { color: #9c27b0; }
+.canvas-node-content a[href="cfs-color://final"] { color: #f44336; }
