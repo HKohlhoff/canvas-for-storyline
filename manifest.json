@@ -1,7 +1,7 @@
 {
   "id": "canvas-for-storyline",
   "name": "Canvas for StoryLine",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "minAppVersion": "1.13.0",
   "description": "Turn StoryLine writing projects into connected Canvas books and export-ready master notes.",
   "author": "Holger Kohlhoff",

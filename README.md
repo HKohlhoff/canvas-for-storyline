@@ -222,6 +222,10 @@ network functionality and sends no data anywhere. Settings, generated-file
 ownership hashes, and the update-note marker are stored in the plugin's local
 `data.json`.
 
+Content reads are limited to the configured StoryLine project folder, its
+parent-series Codex, and the corresponding `series.json`. Folder selection uses
+a folder-only traversal without reading unrelated file contents.
+
 The installed plugin does not contact the Ko-fi image or any other remote
 README content. Canvas HTML Exporter is a separate desktop-only plugin; its own
 privacy documentation applies when it is installed.

@@ -1,0 +1,54 @@
+name: Release Obsidian plugin
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24.x"
+          cache: "npm"
+      - run: npm ci
+      - run: npm test
+        env:
+          EXPECTED_RELEASE_TAG: ${{ github.ref_name }}
+      - run: npm run build:prod
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            release/main.js
+            release/manifest.json
+            release/styles.css
+      - name: Publish release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" \
+              --clobber \
+              release/main.js \
+              release/manifest.json \
+              release/styles.css
+          else
+            gh release create "$tag" \
+              --verify-tag \
+              --title="$tag" \
+              --notes="Release $tag for Canvas for StoryLine." \
+              release/main.js \
+              release/manifest.json \
+              release/styles.css
+          fi
