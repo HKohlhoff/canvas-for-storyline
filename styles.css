@@ -37,18 +37,3 @@
   padding: 16px 0 4px;
   position: sticky;
 }
-
-.canvas-node-content a[href^="cfs-color://"] {
-  pointer-events: none;
-  padding-inline-end: 0;
-  background-image: none !important;
-  font-weight: var(--font-semibold);
-  text-decoration: none;
-}
-
-.canvas-node-content a[href="cfs-color://idea"] { color: #9e9e9e; }
-.canvas-node-content a[href="cfs-color://outlined"] { color: #2196f3; }
-.canvas-node-content a[href="cfs-color://draft"] { color: #ff9800; }
-.canvas-node-content a[href="cfs-color://written"] { color: #4caf50; }
-.canvas-node-content a[href="cfs-color://revised"] { color: #9c27b0; }
-.canvas-node-content a[href="cfs-color://final"] { color: #f44336; }

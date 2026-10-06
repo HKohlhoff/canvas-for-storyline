@@ -27,9 +27,10 @@
 - Remove the project prefix from visible generated Canvas headings. Keep it in
   the overview information heading, prefixed by `Buch N -` only when StoryLine
   determines the book number unambiguously.
-- Use the overview's compact 100-unit free vertical card spacing on chapter
-  canvases as well, and attach visible labels and overview hover descriptions
-  through Obsidian's active Canvas nodes so they survive Canvas rerenders.
+- Use uniform cards and 40-unit inner spacing in chapter columns, with 70 units
+  above and between chapter cards in overview act columns. Keep column groups
+  equally wide and compactly spaced, and align the overview information box
+  with the complete column grid.
 - Size every act or category column to the longest populated column on its
   Canvas instead of retaining a fixed oversized minimum height.
 - Limit hover descriptions to chapter cards on the overview; chapter Canvas
@@ -44,9 +45,10 @@
 - Include referenced entries from the series-level Codex.
 - Generate an overview Canvas, chapter Canvas files, and `Master.md`.
 - Preserve StoryLine narrative metadata and connect scene relations in chapter canvases.
-- Add deterministic IDs and recreate existing target files on every run.
-- Move obsolete plugin-owned Canvas files to Obsidian's configured trash when
-  generated Canvas names change.
+- Add deterministic IDs and recreate same-named target files on every
+  user-started generation after moving existing Vault files to Obsidian's
+  configured trash. Use ownership state only to identify obsolete generated
+  Canvas files safely.
 - Add vault, StoryLine project-folder, and creation-date information plus act,
   chapter, and scene headings to the master file.
 - Add production build, test, release metadata, and hot-reload deployment.
@@ -54,9 +56,13 @@
   `Last Update.md`, and **Show last update** at the bottom of the settings.
 - Add an embedded README viewer with **Show readme** beside the update entry in
   the final **About** settings section.
-- Add a complete Rotkäppchen demo Vault covering every exported StoryLine
-  category and all six scene statuses.
-- Bundle Canvas Folding and Canvas HTML Exporter in the demo Vault to
-  demonstrate the complete StoryLine-to-Canvas-to-HTML publishing workflow.
-- Document the three companion plugins, publication workflow, support,
-  privacy, and the generated-output license exception.
+- Add a complete Little Red Riding Hood demo Vault covering every exported StoryLine
+  category and all six scene statuses, with English content, paths, metadata,
+  generated headings, and Canvas files.
+- Ship the Demo Vault without installed Community plugins or local plugin data
+  and document how to install StoryLine plus the optional companion plugins.
+- Localize generated Canvas and Master labels from the StoryLine project's
+  language metadata.
+- Document the three companion plugins, the browser-friendly HTML workflow,
+  complete Markdown content in Canvas cards and HTML pages, support, privacy,
+  and the generated-output license exception.

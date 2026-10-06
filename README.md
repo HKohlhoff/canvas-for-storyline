@@ -9,7 +9,7 @@ Obsidian.
 The generated `Master.md` is also intended as a stable source for a later
 TeX/LaTeX export workflow.
 
-## A complete Canvas publishing workflow
+## A complete Canvas and HTML workflow
 
 Canvas for StoryLine is designed to work especially well with two companion
 plugins:
@@ -22,14 +22,19 @@ plugins:
    chapters or branches.
 3. [**Canvas HTML Exporter**](https://github.com/HKohlhoff/canvas-html-exporter)
    turns the overview and its linked chapter Canvases into a portable,
-   interactive HTML publication with navigation, deep search, linked pages,
-   and browser-side folding.
+   browser-friendly HTML view with navigation, deep search, linked pages, and
+   browser-side folding.
+
+The generated chapter Canvases do not contain only titles or summaries. Their
+file cards provide the complete contents of the referenced Markdown files for
+scenes, scene notes, characters, and locations. Canvas HTML Exporter carries
+those complete Markdown contents into the corresponding HTML pages, where they can be read in a browser as part of the connected Canvas structure.
 
 Each plugin remains useful and installable on its own; there is no hard runtime
 dependency between them. Together they cover the complete path from a
 structured StoryLine manuscript through visual work in Obsidian to a
-navigable publication. The exporter is the essential final step when the
-Canvas book should be read or shared outside Obsidian.
+navigable HTML representation. The exporter is the final step when the Canvas
+book should be viewed in a browser outside Obsidian.
 
 If Canvas for StoryLine is useful to you, you can support its continued
 development by buying me a coffee.
@@ -42,6 +47,8 @@ development by buying me a coffee.
   chapter.
 - Groups the overview by acts and chapter canvases by scenes, scene notes,
   characters/POV, and locations.
+- Makes the complete contents of every referenced Markdown file available in
+  the chapter Canvas cards and, when exported, in the corresponding HTML pages.
 - Preserves StoryLine manuscript order and visualizes StoryLine relationships
   as Canvas connections.
 - Uses StoryLine's six scene-status colors and explains them on the overview
@@ -51,10 +58,14 @@ development by buying me a coffee.
 - Shows chapter descriptions as hover information on overview cards. Chapter
   cards for scenes, notes, characters, and locations remain free of hover
   overlays.
-- Uses compact, consistent geometry: cards keep a 100-unit vertical gap and
-  every column on a Canvas matches that Canvas's longest populated column.
-- Creates `Master.md` with ordinary `[[...]]` links to manuscript scenes only,
-  ordered by act, chapter, and scene sequence.
+- Uses compact, consistent geometry: chapter cards use one uniform size and a
+  40-unit inner margin on every side, including above and between cards, in
+  equally wide, compactly spaced column groups. Every column on a Canvas
+  matches that Canvas's longest populated column.
+- Keeps 70 units of space above and between chapter cards in overview act
+  columns, with the information box aligned to the complete column grid.
+- Creates `Master.md` with either ordinary `[[...]]` links or embedded
+  `![[...]]` scene notes, ordered by act, chapter, and scene sequence.
 - Offers separate commands and output settings for Canvas files and the master
   file.
 - Uses only Obsidian APIs and works without desktop-only or network access.
@@ -86,23 +97,39 @@ complete workflow described above.
 
 The repository contains a ready-to-use demonstration in
 [`examples/demo-vault`](examples/demo-vault/). It includes a complete
-**Rotkäppchen** StoryLine project with three acts, six chapters, all six scene
-statuses, scene notes, characters, locations, and a shared series Codex.
+**Little Red Riding Hood** StoryLine project with three acts, six chapters, all
+six scene statuses, scene notes, characters, locations, and a shared series
+Codex. All sample content, folder names, generated headings, and metadata are
+in English.
 
 To try it:
 
 1. Download or clone this repository.
 2. Open `examples/demo-vault` as a Vault in Obsidian.
-3. Canvas Folding and Canvas HTML Exporter are already bundled and enabled in
-   this demo Vault. Install and enable the current Canvas for StoryLine build.
-4. Select `StoryLine/Märchenwald/Rotkäppchen` as the StoryLine project folder.
-5. Run **Canvas for StoryLine: Create StoryLine Canvas files**.
-6. Open the generated Rotkäppchen overview to explore or fold it. To publish
-   the complete connected book, open that overview and run **Canvas HTML
-   Exporter: Export active canvas as HTML**.
+3. Install and enable StoryLine and Canvas for StoryLine. The Demo Vault ships
+   without installed plugins or local plugin data.
+4. Optionally install Canvas Folding and Canvas HTML Exporter for the complete
+   interactive Canvas and browser workflow.
+5. Inspect the pre-generated overview, six chapter Canvases, and `Master.md`
+   under `StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas`.
+6. In Canvas for StoryLine, select
+   `StoryLine/Enchanted Forest/Little Red Riding Hood` as the project folder and
+   keep all four element types enabled.
+7. Run **Create StoryLine Canvas files**. Existing same-named generated output
+   is moved to Obsidian's configured trash and recreated.
+8. Open the Little Red Riding Hood overview to explore or fold it. To create a
+   browser-friendly HTML view of the complete connected book, run
+   **Canvas HTML Exporter: Export active canvas as HTML**.
 
-The bundled companion-plugin builds retain their own licenses. Their source
-code and current releases are available from the linked repositories above.
+The sample uses StoryLine's native `Scenes`, `SceneNotes`, shared
+`Codex/Characters` and `Codex/Locations`, `Research`, `Archive`, and `System`
+layout. Its scenes contain StoryLine-native POV, character, location,
+setup/payoff, plotline, chronology, conflict, emotion, and notes references;
+Codex entries contain book, relationship, inhabitant, and connected-location
+references.
+
+The companion plugins are not bundled. Their source code and current releases
+are available from the linked repositories above.
 
 ## Setup
 
@@ -113,6 +140,7 @@ Open **Settings → Canvas for StoryLine** and configure:
 | StoryLine project folder | Vault-relative source folder. Generated Canvas files are written to its direct `Canvas` subfolder. |
 | Included StoryLine elements | Select scenes, scene notes, characters, and locations for chapter canvases. |
 | Master output folder | Optional independent Vault folder for `Master.md`. When empty, the project's `Canvas` folder is used. |
+| Scene inclusion | Choose ordinary Wikilinks or embedded scene notes in `Master.md`. |
 | Create master file with Canvas files | Controls whether the Canvas command also recreates `Master.md`. |
 
 The project and Master folders can both be selected with a Vault folder
@@ -142,9 +170,14 @@ Canvas contains equally high category columns based on its longest populated
 column, a link back to the overview, and the complete StoryLine status legend.
 
 Actual Canvas filenames retain the project prefix and `.canvas` extension for
-unambiguous Vault links. Visible headings omit both. The overview information
-heading uses `Project - Übersicht`; when the parent series metadata identifies
-the book number unambiguously, it uses `Buch N - Project - Übersicht`.
+unambiguous Vault links. Visible headings omit both. Labels follow the
+StoryLine project's language metadata: English projects use `Overview`,
+`Chapter`, `Act`, and `Book`; other projects use the corresponding German
+labels `Übersicht`, `Kapitel`, `Akt`, and `Buch`. When the parent-series
+metadata identifies the book number unambiguously, the overview heading also
+includes it. Generated Canvas metadata provides localized short names such as
+`Overview` and `Chapter N - Title`, so HTML exports use those names for page
+and hover titles instead of exposing project-prefixed filenames.
 
 ## Master file
 
@@ -153,7 +186,8 @@ the book number unambiguously, it uses `Buch N - Project - Übersicht`.
 - level-one headings for acts;
 - level-two headings for chapters;
 - level-three headings for scenes;
-- ordinary Obsidian links without embeds.
+- either ordinary Obsidian links or embedded scene notes, as selected in the
+  **Scene inclusion** setting.
 
 An information block records the Vault, StoryLine project folder, and creation
 date. This deliberately small structure is intended as the input boundary for
@@ -161,9 +195,11 @@ the planned TeX/LaTeX exporter.
 
 ## Important: generated files are replaced
 
-Every run moves an existing target file to Obsidian's configured trash and
-creates a new file. Manual edits in generated Canvas files or `Master.md` are
-therefore not preserved.
+Every user-started generation moves existing same-named target files to
+Obsidian's configured trash and recreates them from the current StoryLine data.
+This applies to Canvas files in the project's direct `Canvas` folder and to
+`Master.md` in its configured output folder. Manual changes made only in these
+generated targets are therefore not preserved.
 
 When generated Canvas names change, obsolete plugin-owned Canvas files in the
 project's direct `Canvas` folder are also moved to trash. Other files and
@@ -196,9 +232,10 @@ privacy documentation applies when it is installed.
   conventions may require parser extensions.
 - Generated output is intentionally replaceable and must not be used as the
   sole location for manual content.
-- Version 0.8.0 has been validated against project M with 31 scenes, 31 scene
-  notes, 16 characters, 13 locations, and six chapter canvases. A final manual
-  release-gate pass remains required before publication.
+- Version 0.8.0 includes automated coverage for German and English StoryLine
+  structures. The included English Demo Vault exercises three acts, six
+  chapters, all six scene statuses, scene notes, characters, locations, and a
+  shared series Codex.
 
 ## Development
 
@@ -213,6 +250,18 @@ For local deployment with hot reload:
 ```bash
 OBSIDIAN_PLUGINS_DIR="/path/to/vault/.obsidian/plugins" npm run build:prod:deploy
 ```
+
+For development only, the build can be watched and deployed into this
+repository's Demo Vault with:
+
+```bash
+npm run dev:demo
+```
+
+The released Demo Vault intentionally contains no installed Community plugins.
+After using `dev:demo`, remove the deployed plugin again before preparing a
+Demo Vault release. Reload Obsidian manually unless Hot Reload has been
+installed locally for development.
 
 The deployment target is always `canvas-for-storyline`. Production release
 artifacts are written to `release/`.

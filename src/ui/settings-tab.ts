@@ -72,6 +72,18 @@ export class CanvasForStoryLineSettingTab extends PluginSettingTab {
       }));
 
     new Setting(this.containerEl)
+      .setName("Scene inclusion")
+      .setDesc("Choose whether Master.md contains ordinary scene links or embeds the complete scene notes.")
+      .addDropdown((dropdown) => dropdown
+        .addOption("wikilinks", "Wikilinks")
+        .addOption("embeds", "Embedded notes")
+        .setValue(this.plugin.settings.masterSceneLinkMode)
+        .onChange(async (value) => {
+          this.plugin.settings.masterSceneLinkMode = value === "embeds" ? "embeds" : "wikilinks";
+          await this.plugin.saveSettings();
+        }));
+
+    new Setting(this.containerEl)
       .setName("Create master file with Canvas files")
       .setDesc("When enabled, the Canvas command also recreates Master.md. The separate master command always recreates it.")
       .addToggle((toggle) => toggle

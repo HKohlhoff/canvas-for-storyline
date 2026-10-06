@@ -29,7 +29,12 @@ change is requested.
 
 - Use Obsidian Vault APIs for all vault files and folders.
 - Do not introduce Node/Electron runtime dependencies; the plugin is not desktop-only.
-- Never silently overwrite an unowned or manually changed generated file.
+- A user-started generation may replace same-named target files in the direct
+  project `Canvas` folder and the configured `Master.md` output path. Move
+  existing Vault files to Obsidian's configured trash before recreating them.
+- Remove obsolete outputs only when plugin ownership state identifies them as
+  generated files. Never modify StoryLine sources or unrelated files and
+  folders outside the planned output paths.
 - Store ownership state only in plugin data, not in StoryLine source files.
 - Do not add live synchronization until source semantics and conflict behavior
   have been validated manually.

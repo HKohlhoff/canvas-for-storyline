@@ -30,8 +30,8 @@
   stores an independent vault-relative output path.
 - [ ] Each category toggle changes generated contents as expected.
 - [ ] Overview and chapter filenames begin with the StoryLine project name;
-  chapter group names omit both that project prefix and `.canvas`, and are
-  visibly smaller than act headings.
+  visible headings and generated short names omit both that project prefix and
+  `.canvas`.
 - [ ] Overview act groups and chapter category groups match the documented colors.
 - [ ] Scene colors use StoryLine's six built-in status colors.
 - [ ] Every chapter Canvas shows all six StoryLine status colors in a separate
@@ -49,18 +49,22 @@
   chapters, and level-three headings for scenes.
 - [ ] The Canvas command respects the master-file setting; the separate master
   command recreates `Master.md` regardless of that setting.
-- [ ] Overview act groups and chapter category groups contain file cards
-  directly with the reference geometry and 100 Canvas units of free vertical
-  space between cards; no extra wrapper or visible description nodes remain.
+- [ ] Overview act groups contain chapter cards with 70 Canvas units above and
+  between cards. Chapter category groups use one uniform card size and 40
+  Canvas units on every inner side, including above and between cards.
+- [ ] Column groups are equally wide and compactly spaced; the overview
+  information box aligns with the complete column grid.
 - [ ] All act columns on an overview have the height of its longest act column;
   all category columns on a chapter Canvas have the height of its longest
   populated category column.
 - [ ] Generated Canvas-card labels retain their filename but omit the visible
   project prefix and `.canvas` suffix without changing the actual Vault
   filename.
-- [ ] The overview information heading reads `Project - Übersicht`; when the
-  StoryLine series metadata identifies the book number unambiguously, it reads
-  `Buch N - Project - Übersicht`.
+- [ ] Canvas headings, category labels, the status legend, and `Master.md`
+  headings use English labels for an English StoryLine project and German
+  labels for a German StoryLine project.
+- [ ] The English Demo Vault overview heading reads
+  `Book 1 - Little Red Riding Hood - Overview`.
 - [ ] Resting the pointer on an overview chapter card shows its complete
   StoryLine description as automatically sized quick information without
   changing the Canvas layout. Scene, scene-note, character, and location cards
@@ -70,21 +74,23 @@
 - [ ] Canvas output stays in `<StoryLine project>/Canvas`; `Master.md` is
   created in its configured output folder (or in Canvas when none is set).
 - [ ] `Canvas/**` is not re-imported as StoryLine source.
-- [ ] A second run moves every existing target file to Obsidian trash and
-  recreates it from current StoryLine data.
+- [x] A second user-started run moves every existing same-named target file to
+  Obsidian's configured trash and recreates it from current StoryLine data.
 - [ ] When generated Canvas names change, obsolete plugin-owned Canvas files
-  in the direct Canvas folder are moved to Obsidian trash; `Vorgaben/` remains
-  untouched.
-- [ ] Manual changes to a generated target file are deliberately discarded on
-  the next run.
+  in the direct Canvas folder are moved to Obsidian trash; unrelated files and
+  subfolders remain untouched.
 - [ ] Missing project folders and blocked output paths show useful notices.
 - [ ] Mobile compatibility is smoke-tested; no Node/Electron API is used at runtime.
 
-## Publication
+## Release
 
 - [x] Validate parsing against at least one real StoryLine project without modifying it.
 - [x] Review README, changelog, privacy statement, and license.
-- [x] Verify the demo Vault contains the release builds of Canvas Folding and
-  Canvas HTML Exporter and enables both plugin IDs.
-- [ ] Create release artifacts from a green production build.
+- [x] Verify the English Demo Vault contains the generated overview, six
+  chapter Canvases, and `Master.md`, but no installed Community plugins or
+  local plugin data. Its README explains how to install the required and
+  optional plugins.
+- [x] Verify the Canvas and Demo documentation explains that file cards and
+  their exported HTML pages contain the complete referenced Markdown content.
+- [x] Create release artifacts from a green production build.
 - [ ] Create the annotated version tag and GitHub release only after explicit approval.

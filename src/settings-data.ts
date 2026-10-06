@@ -1,10 +1,13 @@
 import type { StoryLineCategory } from "./model/storyline";
 import { normalizeVaultPath } from "./vault/path";
 
+export type MasterSceneLinkMode = "wikilinks" | "embeds";
+
 export interface CanvasForStoryLineSettings {
   projectPath: string;
   masterOutputPath: string;
   createMasterWithCanvases: boolean;
+  masterSceneLinkMode: MasterSceneLinkMode;
   includedCategories: Record<StoryLineCategory, boolean>;
 }
 
@@ -12,6 +15,7 @@ export const DEFAULT_SETTINGS: CanvasForStoryLineSettings = {
   projectPath: "",
   masterOutputPath: "",
   createMasterWithCanvases: true,
+  masterSceneLinkMode: "wikilinks",
   includedCategories: {
     scenes: true,
     sceneNotes: true,
@@ -29,6 +33,7 @@ export function normalizeSettings(value: unknown): CanvasForStoryLineSettings {
     projectPath: rawPath === "" ? "" : normalizeVaultPath(rawPath.replace(/^\/+|\/+$/g, "")),
     masterOutputPath: rawMasterPath === "" ? "" : normalizeVaultPath(rawMasterPath.replace(/^\/+|\/+$/g, "")),
     createMasterWithCanvases: readBoolean(candidate.createMasterWithCanvases, true),
+    masterSceneLinkMode: candidate.masterSceneLinkMode === "embeds" ? "embeds" : "wikilinks",
     includedCategories: {
       scenes: readBoolean(categories.scenes, true),
       sceneNotes: readBoolean(categories.sceneNotes, true),

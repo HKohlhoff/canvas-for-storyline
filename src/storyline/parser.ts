@@ -38,6 +38,7 @@ export function parseStoryLineProject(
   const rootSegments = normalizedRoot.split("/");
   return {
     name: projectMetadata.title ?? rootSegments[rootSegments.length - 1] ?? normalizedRoot,
+    ...optionalString("language", projectMetadata.language),
     ...optionalString("vaultName", seriesContext.vaultName),
     ...optionalString("seriesName", seriesContext.seriesName ?? projectMetadata.seriesId),
     ...(seriesContext.bookNumber === undefined ? {} : { bookNumber: seriesContext.bookNumber }),
@@ -79,7 +80,10 @@ function parseElement(rootPath: string, document: StoryLineSourceDocument): Stor
     ...optionalNumber("act", frontmatter.act),
     ...optionalNumber("sequence", frontmatter.sequence),
     ...optionalString("notesFile", frontmatter.notesFile),
-    ...optionalList("characters", frontmatter.characters),
+    ...optionalList("characters", uniqueStrings([
+      ...(frontmatter.characters ?? []),
+      ...(frontmatter.pov ? [frontmatter.pov] : []),
+    ])),
     ...optionalList("locations", [
       ...(frontmatter.locations ?? []),
       ...(frontmatter.location ? [frontmatter.location] : []),
@@ -115,6 +119,7 @@ function categoryFromType(value: string | undefined): StoryLineCategory | null {
 
 interface StoryLineFrontmatter {
   type?: string;
+  language?: string;
   title?: string;
   name?: string;
   chapter?: string;
@@ -122,6 +127,7 @@ interface StoryLineFrontmatter {
   sequence?: string;
   notesFile?: string;
   characters?: string[];
+  pov?: string;
   location?: string;
   locations?: string[];
   status?: string;
@@ -179,6 +185,7 @@ function readFrontmatter(content: string): StoryLineFrontmatter {
   }
   return {
     ...optionalString("type", scalars.type ?? scalars.typ),
+    ...optionalString("language", scalars.language ?? scalars.sprache),
     ...optionalString("title", scalars.title ?? scalars.titel),
     ...optionalString("name", scalars.name),
     ...optionalString("chapter", scalars.chapter ?? scalars.kapitel),
@@ -186,6 +193,7 @@ function readFrontmatter(content: string): StoryLineFrontmatter {
     ...optionalString("sequence", scalars.sequence),
     ...optionalString("notesFile", normalizeLinkTarget(scalars.notesfile)),
     ...optionalList("characters", normalizeLinkTargets(lists.characters)),
+    ...optionalString("pov", normalizeLinkTarget(scalars.pov)),
     ...optionalString("location", normalizeLinkTarget(scalars.location)),
     ...optionalList("locations", normalizeLinkTargets(lists.locations)),
     ...optionalString("status", scalars.status),
@@ -237,6 +245,11 @@ function cleanYamlScalar(value: string): string {
 function normalizeLinkTargets(values: string[] | undefined): string[] | undefined {
   if (!values) return undefined;
   return values.map(normalizeLinkTarget).filter((value): value is string => Boolean(value));
+}
+
+function uniqueStrings(values: string[]): string[] | undefined {
+  const unique = [...new Set(values)];
+  return unique.length > 0 ? unique : undefined;
 }
 
 function normalizeLinkTarget(value: string | undefined): string | undefined {

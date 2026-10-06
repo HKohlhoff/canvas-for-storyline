@@ -12,7 +12,7 @@ test("prepares embedded README content without automatic image requests", () => 
     "[External](https://obsidian.md)",
   ].join("\n"), "https://github.com/example/plugin/");
 
-  assert.doesNotMatch(prepared, /<img|!\[/u);
+  assert.doesNotMatch(prepared, /<img|!\[[^[]/u);
   assert.doesNotMatch(prepared, /Image omitted|Local screenshot|Remote|Coffee/u);
   assert.match(prepared, /\[Support this plugin on Ko-fi\]\(https:\/\/ko-fi\.com\/example\)/u);
   assert.match(prepared, /github\.com\/example\/plugin\/blob\/master\/docs\/guide\.md/u);
@@ -24,7 +24,7 @@ test("keeps the actual README suitable for the embedded documentation view", () 
     readFileSync("README.md", "utf8"),
     "https://github.com/HKohlhoff/canvas-for-storyline",
   );
-  assert.doesNotMatch(prepared, /<img|!\[|Image omitted|\n{3,}/u);
+  assert.doesNotMatch(prepared, /<img|!\[[^[]|Image omitted|\n{3,}/u);
   assert.match(prepared, /^# Canvas for StoryLine$/mu);
   assert.match(prepared, /Show last update/u);
 });

@@ -1,0 +1,172 @@
+{
+  "nodes": [
+    {
+      "id": "611c46e1e15c0620",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 6 - A Promise for the Journey Home &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "6c56dfde2f5fedee",
+      "type": "group",
+      "label": "Chapter 6 · A Promise for the Journey Home",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 1040
+    },
+    {
+      "id": "4f2d4f919c81168e",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "af13e24574facff2",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "9ad083141adf20d7",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "eb08920ce737951b",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "cfs-card-7948585359d6e3bb",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 3/03-06 Cake, Juice, and a Promise.md",
+      "color": "#F44336",
+      "cfsDescription": "After the rescue, the small company celebrates, and Little Red Riding Hood understands the warning.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-c6fd283f6220b14b",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/Cake, Juice, and a Promise - Notes.md",
+      "color": "2",
+      "cfsDescription": "The cake and juice return as the fulfilled errand. Little Red Riding Hood's resolution completes the arc begun by the promise in the first scene without turning into a moralizing speech.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-762e534eda6267a2",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-58ba0220b840fec2",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Grandmother.md",
+      "color": "6",
+      "cfsDescription": "An older woman with silver hair, a white nightcap, and a warm wool jacket.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-a44c71e7b89a98ad",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Huntsman.md",
+      "color": "6",
+      "cfsDescription": "An attentive woodsman with a green coat, sturdy shoes, and a working knife.",
+      "x": 1360,
+      "y": 970,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-151f82bd2ea4f5d9",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Grandmother's House.md",
+      "color": "5",
+      "cfsDescription": "A small house beneath three oaks at the forest's edge, with a living kitchen and a darkened bedroom.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "4efa6e9344d179a0",
+      "fromNode": "cfs-card-7948585359d6e3bb",
+      "toNode": "cfs-card-c6fd283f6220b14b",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "1bc4cb123c48680d",
+      "fromNode": "cfs-card-7948585359d6e3bb",
+      "toNode": "cfs-card-762e534eda6267a2",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "b59135c4e2a8211d",
+      "fromNode": "cfs-card-7948585359d6e3bb",
+      "toNode": "cfs-card-58ba0220b840fec2",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "571984fb77cf58d6",
+      "fromNode": "cfs-card-7948585359d6e3bb",
+      "toNode": "cfs-card-a44c71e7b89a98ad",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "a28e9af14a0bfd0a",
+      "fromNode": "cfs-card-7948585359d6e3bb",
+      "toNode": "cfs-card-151f82bd2ea4f5d9",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 6 - A Promise for the Journey Home"
+}

@@ -26,6 +26,19 @@ export default defineConfig(
     }
   },
   {
+    files: ["scripts/**/*.ts"],
+    languageOptions: {
+      globals: globals.node,
+      parser: tseslint.parser,
+      parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname }
+    },
+    rules: {
+      "obsidianmd/hardcoded-config-path": "off",
+      "obsidianmd/no-nodejs-modules": "off",
+      "obsidianmd/rule-custom-message": "off"
+    }
+  },
+  {
     files: ["build.mjs", "eslint.config.mjs", "scripts/**/*.mjs"],
     rules: {
       "obsidianmd/hardcoded-config-path": "off",
