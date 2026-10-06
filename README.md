@@ -102,6 +102,9 @@ six scene statuses, scene notes, characters, locations, and a shared series
 Codex. All sample content, folder names, generated headings, and metadata are
 in English.
 
+See [`examples/How to Use the Demo-Vault.md`](examples/How%20to%20Use%20the%20Demo-Vault.md)
+for the standalone walkthrough, matching the layout used by Canvas HTML Exporter.
+
 To try it:
 
 1. Download or clone this repository.

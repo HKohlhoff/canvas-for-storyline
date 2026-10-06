@@ -10,6 +10,7 @@ const readme = fs.readFileSync("README.md", "utf8");
 const copyingException = fs.readFileSync("COPYING_EXCEPTION", "utf8");
 const demoPlugins = JSON.parse(fs.readFileSync("examples/demo-vault/.obsidian/community-plugins.json", "utf8"));
 const demoPluginsPath = "examples/demo-vault/.obsidian/plugins";
+const demoGuidePath = "examples/How to Use the Demo-Vault.md";
 const demoCanvasPath = "examples/demo-vault/StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas";
 const errors = [];
 if (manifest.id !== "canvas-for-storyline") errors.push("Unexpected plugin id.");
@@ -30,6 +31,7 @@ if (!Array.isArray(demoPlugins) || demoPlugins.length !== 0) {
 if (fs.existsSync(demoPluginsPath) && fs.readdirSync(demoPluginsPath).length !== 0) {
   errors.push("Demo Vault must not bundle installed Community plugins.");
 }
+if (!fs.existsSync(demoGuidePath)) errors.push("Demo Vault usage guide is missing from examples.");
 const demoCanvasFiles = fs.readdirSync(demoCanvasPath).filter((file) => file.endsWith(".canvas"));
 if (demoCanvasFiles.length !== 7) errors.push("Demo Vault must contain the overview and six chapter Canvases.");
 if (!fs.existsSync(`${demoCanvasPath}/Master.md`)) errors.push("Demo Vault is missing its generated Master.md.");
