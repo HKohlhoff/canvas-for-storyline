@@ -1,0 +1,153 @@
+{
+  "nodes": [
+    {
+      "id": "0c803edfaf64b0b7",
+      "type": "text",
+      "x": 0,
+      "y": 0,
+      "width": 1760,
+      "height": 200,
+      "text": "# Book 1 - Little Red Riding Hood - Overview\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final"
+    },
+    {
+      "id": "d2148d1c91bdf36e",
+      "type": "group",
+      "label": "Act 1 · The Errand",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 560,
+      "height": 650
+    },
+    {
+      "id": "cfs-card-e61f223167e0af19",
+      "type": "file",
+      "label": "Chapter 1 · A Basket for Grandmother",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 1 - A Basket for Grandmother.canvas",
+      "color": "4",
+      "cfsDescription": "Mother gives Little Red Riding Hood an errand and a clear warning.",
+      "x": 40,
+      "y": 360,
+      "width": 480,
+      "height": 220
+    },
+    {
+      "id": "cfs-card-e31f1d7866e0ad86",
+      "type": "file",
+      "label": "Chapter 2 · The Encounter on the Path",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 2 - The Encounter on the Path.canvas",
+      "color": "4",
+      "cfsDescription": "In the forest, the wolf gains Little Red Riding Hood's trust.",
+      "x": 40,
+      "y": 650,
+      "width": 480,
+      "height": 220
+    },
+    {
+      "id": "d51491d592bdf501",
+      "type": "group",
+      "label": "Act 2 · The Danger",
+      "color": "4",
+      "x": 600,
+      "y": 290,
+      "width": 560,
+      "height": 650
+    },
+    {
+      "id": "cfs-card-e41f1f0b65e0abf3",
+      "type": "file",
+      "label": "Chapter 3 · Flowers and a Faster Wolf",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 3 - Flowers and a Faster Wolf.canvas",
+      "color": "4",
+      "cfsDescription": "While Little Red Riding Hood picks flowers, the wolf rushes to Grandmother's house.",
+      "x": 640,
+      "y": 360,
+      "width": 480,
+      "height": 220
+    },
+    {
+      "id": "cfs-card-e91f26ea64e0aa60",
+      "type": "file",
+      "label": "Chapter 4 · Who Is in Grandmother's Bed?",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 4 - Who Is in Grandmother's Bed.canvas",
+      "color": "4",
+      "cfsDescription": "Little Red Riding Hood realizes too late who is waiting in the bed.",
+      "x": 640,
+      "y": 650,
+      "width": 480,
+      "height": 220
+    },
+    {
+      "id": "d41490428fbdf048",
+      "type": "group",
+      "label": "Act 3 · The Rescue",
+      "color": "4",
+      "x": 1200,
+      "y": 290,
+      "width": 560,
+      "height": 650
+    },
+    {
+      "id": "cfs-card-ea1f287d73e0c1fd",
+      "type": "file",
+      "label": "Chapter 5 · The Huntsman at the Door",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 5 - The Huntsman at the Door.canvas",
+      "color": "4",
+      "cfsDescription": "The huntsman notices the danger and rescues Grandmother and the child.",
+      "x": 1240,
+      "y": 360,
+      "width": 480,
+      "height": 220
+    },
+    {
+      "id": "cfs-card-e71f23c472e0c06a",
+      "type": "file",
+      "label": "Chapter 6 · A Promise for the Journey Home",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Chapter 6 - A Promise for the Journey Home.canvas",
+      "color": "4",
+      "cfsDescription": "Over a shared meal, Little Red Riding Hood resolves to stay on the path from now on.",
+      "x": 1240,
+      "y": 650,
+      "width": 480,
+      "height": 220
+    }
+  ],
+  "edges": [
+    {
+      "id": "b9dfccca4d0a1d7d",
+      "fromNode": "cfs-card-e61f223167e0af19",
+      "toNode": "cfs-card-e31f1d7866e0ad86",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "8f68b1600293e9ff",
+      "fromNode": "cfs-card-e31f1d7866e0ad86",
+      "toNode": "cfs-card-e41f1f0b65e0abf3",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "918fabfa71db86ad",
+      "fromNode": "cfs-card-e41f1f0b65e0abf3",
+      "toNode": "cfs-card-e91f26ea64e0aa60",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "ebb7311cf130eb73",
+      "fromNode": "cfs-card-e91f26ea64e0aa60",
+      "toNode": "cfs-card-ea1f287d73e0c1fd",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "id": "693f8b2a646506b5",
+      "fromNode": "cfs-card-ea1f287d73e0c1fd",
+      "toNode": "cfs-card-e71f23c472e0c06a",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ],
+  "name": "Overview"
+}

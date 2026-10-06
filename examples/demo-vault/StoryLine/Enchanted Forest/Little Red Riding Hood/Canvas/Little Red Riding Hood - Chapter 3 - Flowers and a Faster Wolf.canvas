@@ -1,0 +1,172 @@
+{
+  "nodes": [
+    {
+      "id": "641c4b9ae45c0ad9",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 3 - Flowers and a Faster Wolf &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "7156e7bd345ff5cd",
+      "type": "group",
+      "label": "Chapter 3 · Flowers and a Faster Wolf",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 760
+    },
+    {
+      "id": "669f7148fc2bb1f1",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "a09c5e68219f3e25",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "6916de21fd54f6dc",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "92daac079998a346",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "cfs-card-30b8d9419ffc145b",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 2/02-03 The Detour.md",
+      "color": "#FF9800",
+      "cfsDescription": "Little Red Riding Hood picks flowers while the wolf takes the shorter route.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-b39bcc30fc005aba",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/The Detour - Notes.md",
+      "color": "2",
+      "cfsDescription": "Alternate between the slow flower picking and the wolf's purposeful run. The flower meadow should feel inviting even as the lost time increases the danger.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-7d117ef3c9b0fd27",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-caa60cbda1a94213",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Wolf.md",
+      "color": "6",
+      "cfsDescription": "A large gray wolf with yellow eyes, a calm voice, and strikingly polite manners.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-ed07f2a2ac989e14",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Flower Meadow.md",
+      "color": "5",
+      "cfsDescription": "A sunny clearing full of bellflowers, daisies, and red clover away from the path.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-de0e9e81977c224f",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Forest Path.md",
+      "color": "5",
+      "cfsDescription": "A narrow, clearly visible path between the village and Grandmother's house.",
+      "x": 1980,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "90d76ccfe4c2ac00",
+      "fromNode": "cfs-card-30b8d9419ffc145b",
+      "toNode": "cfs-card-b39bcc30fc005aba",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "f190baf4c59ef80d",
+      "fromNode": "cfs-card-30b8d9419ffc145b",
+      "toNode": "cfs-card-7d117ef3c9b0fd27",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "75ad09a281d37641",
+      "fromNode": "cfs-card-30b8d9419ffc145b",
+      "toNode": "cfs-card-caa60cbda1a94213",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "a002cec16d0a22f6",
+      "fromNode": "cfs-card-30b8d9419ffc145b",
+      "toNode": "cfs-card-ed07f2a2ac989e14",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    },
+    {
+      "id": "fbd114defc6815a5",
+      "fromNode": "cfs-card-30b8d9419ffc145b",
+      "toNode": "cfs-card-de0e9e81977c224f",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 3 - Flowers and a Faster Wolf"
+}

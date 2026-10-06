@@ -64,6 +64,32 @@ const CATEGORY_COLORS: Record<StoryLineCategory, CanvasColor> = {
   locations: "5",
 };
 
+const CHAPTER_CARD_WIDTH = 460;
+const CHAPTER_CARD_HEIGHT = 240;
+const CHAPTER_COLUMN_PADDING = 40;
+const CHAPTER_CATEGORY_TOP = 370;
+const CHAPTER_CARD_TOP = CHAPTER_CATEGORY_TOP + CHAPTER_COLUMN_PADDING;
+const CHAPTER_CARD_VERTICAL_GAP = CHAPTER_COLUMN_PADDING;
+const OVERVIEW_COLUMN_WIDTH = 560;
+const OVERVIEW_COLUMN_GAP = 40;
+const OVERVIEW_CARD_HEIGHT = 220;
+const OVERVIEW_COLUMN_PADDING = 70;
+const OVERVIEW_CARD_VERTICAL_GAP = OVERVIEW_COLUMN_PADDING;
+const OVERVIEW_GROUP_TOP = 290;
+const OVERVIEW_CARD_TOP = OVERVIEW_GROUP_TOP + OVERVIEW_COLUMN_PADDING;
+const OVERVIEW_SINGLE_CARD_CONTENT_HEIGHT = OVERVIEW_COLUMN_PADDING
+  + OVERVIEW_CARD_HEIGHT
+  + OVERVIEW_COLUMN_PADDING;
+const CHAPTER_COLUMN_WIDTH = 540;
+const CHAPTER_COLUMN_GAP = 80;
+const CHAPTER_HORIZONTAL_MARGIN = 80;
+const CHAPTER_CANVAS_WIDTH = CHAPTER_HORIZONTAL_MARGIN * 2
+  + CHAPTER_COLUMN_WIDTH * 4
+  + CHAPTER_COLUMN_GAP * 3;
+const CHAPTER_SINGLE_CARD_CONTENT_HEIGHT = CHAPTER_COLUMN_PADDING
+  + CHAPTER_CARD_HEIGHT
+  + CHAPTER_COLUMN_PADDING;
+
 const STORYLINE_STATUS_COLORS: Readonly<Record<string, {
   canvasColor: CanvasColor;
   name: string;
@@ -81,12 +107,16 @@ export function renderOverviewCanvas(
   project: StoryLineProject,
   chapters: readonly ChapterCanvasDescriptor[],
 ): string {
+  const labels = canvasLabels(project);
   const acts = uniqueActs(chapters);
   const columnHeight = Math.max(
-    340,
+    OVERVIEW_SINGLE_CARD_CONTENT_HEIGHT,
     ...acts.map((act) => {
       const chapterCount = chapters.filter((chapter) => chapter.act === act).length;
-      return chapterCount === 0 ? 0 : 340 + (chapterCount - 1) * 320;
+      return chapterCount === 0
+        ? 0
+        : OVERVIEW_SINGLE_CARD_CONTENT_HEIGHT
+          + (chapterCount - 1) * (OVERVIEW_CARD_HEIGHT + OVERVIEW_CARD_VERTICAL_GAP);
     }),
   );
   const nodes: CanvasNode[] = [{
@@ -94,41 +124,43 @@ export function renderOverviewCanvas(
     type: "text",
     x: 0,
     y: 0,
-    width: Math.max(2000, Math.max(1, acts.length) * 680 - 40),
+    width: Math.max(1, acts.length) * (OVERVIEW_COLUMN_WIDTH + OVERVIEW_COLUMN_GAP)
+      - OVERVIEW_COLUMN_GAP,
     height: 200,
-    text: overviewInfoText(project.name, project.bookNumber),
+    text: overviewInfoText(project, labels),
   }];
 
   for (const [actIndex, act] of acts.entries()) {
     const actChapters = chapters.filter((chapter) => chapter.act === act);
-    const x = actIndex * 680;
+    const x = actIndex * (OVERVIEW_COLUMN_WIDTH + OVERVIEW_COLUMN_GAP);
     nodes.push({
       id: stableId("overview-act", project.rootPath, String(act ?? "none")),
       type: "group",
       label: act === null
-        ? "Kapitel"
-        : `Akt ${act}${project.actLabels[String(act)] ? ` · ${project.actLabels[String(act)]}` : ""}`,
+        ? labels.chapter
+        : `${labels.act} ${act}${project.actLabels[String(act)] ? ` · ${project.actLabels[String(act)]}` : ""}`,
       color: "4",
       x,
-      y: 380,
-      width: 640,
+      y: OVERVIEW_GROUP_TOP,
+      width: OVERVIEW_COLUMN_WIDTH,
       height: columnHeight,
     });
     for (const [chapterIndex, chapter] of actChapters.entries()) {
-      const xPosition = x + 80;
-      const yPosition = 460 + chapterIndex * 320;
+      const xPosition = x + (OVERVIEW_COLUMN_WIDTH - 480) / 2;
+      const yPosition = OVERVIEW_CARD_TOP
+        + chapterIndex * (OVERVIEW_CARD_HEIGHT + OVERVIEW_CARD_VERTICAL_GAP);
       const cardColor = "4";
       nodes.push({
         id: chapterNodeId(project, chapter),
         type: "file",
-        label: `Kapitel ${chapter.number} · ${chapter.label}`,
+        label: `${labels.chapter} ${chapter.number} · ${chapter.label}`,
         file: chapter.path,
         color: cardColor,
         ...(chapter.description ? { cfsDescription: normalizedDescription(chapter.description) } : {}),
         x: xPosition,
         y: yPosition,
         width: 480,
-        height: 220,
+        height: OVERVIEW_CARD_HEIGHT,
       });
     }
   }
@@ -144,7 +176,7 @@ export function renderOverviewCanvas(
       toSide: sameAct ? "top" : "left",
     };
   });
-  return serializeCanvas(nodes, edges);
+  return serializeCanvas(nodes, edges, labels.overview);
 }
 
 export function renderChapterCanvas(
@@ -155,6 +187,7 @@ export function renderChapterCanvas(
   includedCategories: Readonly<Record<StoryLineCategory, boolean>>,
   overviewPath: string,
 ): string {
+  const labels = canvasLabels(project);
   const relationships = scenes.flatMap((scene) => resolveRelationships(scene, availableElements));
   const relatedByCategory = {
     sceneNotes: uniqueTargets(relationships, "sceneNotes"),
@@ -163,83 +196,117 @@ export function renderChapterCanvas(
   };
   const innerHeight = Math.max(
     300,
-    columnContentHeight(includedCategories.scenes, scenes.length, 420, 340),
+    columnContentHeight(
+      includedCategories.scenes,
+      scenes.length,
+      CHAPTER_SINGLE_CARD_CONTENT_HEIGHT,
+      CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP,
+    ),
     columnContentHeight(
       includedCategories.sceneNotes,
       relatedByCategory.sceneNotes.length,
-      420,
-      340,
+      CHAPTER_SINGLE_CARD_CONTENT_HEIGHT,
+      CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP,
     ),
     columnContentHeight(
       includedCategories.characters,
       relatedByCategory.characters.length,
-      470,
-      280,
+      CHAPTER_SINGLE_CARD_CONTENT_HEIGHT,
+      CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP,
     ),
     columnContentHeight(
       includedCategories.locations,
       relatedByCategory.locations.length,
-      510,
-      320,
+      CHAPTER_SINGLE_CARD_CONTENT_HEIGHT,
+      CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP,
     ),
   );
   const nodes: CanvasNode[] = [
     {
-      id: stableId("chapter-nav", project.rootPath, chapter.number),
-      type: "file",
-      label: "← Übersicht",
-      file: overviewPath,
-      color: "5",
-      x: 0,
-      y: -120,
-      width: 440,
-      height: 120,
-    },
-    {
       id: stableId("chapter-color-info", project.rootPath, chapter.number),
       type: "text",
-      text: colorInfoText(),
-      x: 520,
-      y: -120,
-      width: 2520,
-      height: 120,
+      text: chapterInfoText(project, chapter, overviewPath),
+      x: 0,
+      y: 0,
+      width: CHAPTER_CANVAS_WIDTH,
+      height: 200,
     },
     {
       id: stableId("chapter-group", project.rootPath, chapter.number),
       type: "group",
-      label: `Kapitel ${chapter.number} · ${chapter.label}`,
+      label: `${labels.chapter} ${chapter.number} · ${chapter.label}`,
       color: "4",
       x: 0,
-      y: 180,
-      width: 3040,
+      y: 290,
+      width: CHAPTER_CANVAS_WIDTH,
       height: innerHeight + 160,
     },
   ];
 
-  addCategoryGroup(nodes, project, chapter, "scenes", includedCategories.scenes, 100, 620, innerHeight, "Szenen");
-  addCategoryGroup(nodes, project, chapter, "sceneNotes", includedCategories.sceneNotes, 840, 620, innerHeight, "Szenen-Notizen");
-  addCategoryGroup(nodes, project, chapter, "characters", includedCategories.characters, 1580, 620, innerHeight, "Figuren und POV");
-  addCategoryGroup(nodes, project, chapter, "locations", includedCategories.locations, 2320, 620, innerHeight, "Orte");
+  const columnXs = Array.from({ length: 4 }, (_, index) => (
+    CHAPTER_HORIZONTAL_MARGIN + index * (CHAPTER_COLUMN_WIDTH + CHAPTER_COLUMN_GAP)
+  ));
+  addCategoryGroup(nodes, project, chapter, "scenes", includedCategories.scenes, columnXs[0] ?? 0, CHAPTER_COLUMN_WIDTH, innerHeight, labels.scenes);
+  addCategoryGroup(nodes, project, chapter, "sceneNotes", includedCategories.sceneNotes, columnXs[1] ?? 0, CHAPTER_COLUMN_WIDTH, innerHeight, labels.sceneNotes);
+  addCategoryGroup(nodes, project, chapter, "characters", includedCategories.characters, columnXs[2] ?? 0, CHAPTER_COLUMN_WIDTH, innerHeight, labels.charactersAndPov);
+  addCategoryGroup(nodes, project, chapter, "locations", includedCategories.locations, columnXs[3] ?? 0, CHAPTER_COLUMN_WIDTH, innerHeight, labels.locations);
 
   if (includedCategories.scenes) {
-    scenes.forEach((scene, index) => addElementCard(nodes, project, chapter, scene, 220, 340 + index * 340, 380, 240));
+    scenes.forEach((scene, index) => addElementCard(
+      nodes,
+      project,
+      chapter,
+      scene,
+      centeredCardX(columnXs[0] ?? 0),
+      CHAPTER_CARD_TOP + index * (CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP),
+      CHAPTER_CARD_WIDTH,
+      CHAPTER_CARD_HEIGHT,
+    ));
   }
   if (includedCategories.sceneNotes) {
     relatedByCategory.sceneNotes.forEach((note) => {
       const relationshipIndex = scenes.findIndex((scene) => relationships.some(
         (relationship) => relationship.source.id === scene.id && relationship.target.id === note.id,
       ));
-      addElementCard(nodes, project, chapter, note, 920, 340 + Math.max(0, relationshipIndex) * 340, 460, 240);
+      addElementCard(
+        nodes,
+        project,
+        chapter,
+        note,
+        centeredCardX(columnXs[1] ?? 0),
+        CHAPTER_CARD_TOP
+          + Math.max(0, relationshipIndex) * (CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP),
+        CHAPTER_CARD_WIDTH,
+        CHAPTER_CARD_HEIGHT,
+      );
     });
   }
   if (includedCategories.characters) {
     relatedByCategory.characters.forEach((character, index) => {
-      addElementCard(nodes, project, chapter, character, 1725, 450 + index * 280, 330, 180);
+      addElementCard(
+        nodes,
+        project,
+        chapter,
+        character,
+        centeredCardX(columnXs[2] ?? 0),
+        CHAPTER_CARD_TOP + index * (CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP),
+        CHAPTER_CARD_WIDTH,
+        CHAPTER_CARD_HEIGHT,
+      );
     });
   }
   if (includedCategories.locations) {
     relatedByCategory.locations.forEach((location, index) => {
-      addElementCard(nodes, project, chapter, location, 2465, 450 + index * 320, 330, 220);
+      addElementCard(
+        nodes,
+        project,
+        chapter,
+        location,
+        centeredCardX(columnXs[3] ?? 0),
+        CHAPTER_CARD_TOP + index * (CHAPTER_CARD_HEIGHT + CHAPTER_CARD_VERTICAL_GAP),
+        CHAPTER_CARD_WIDTH,
+        CHAPTER_CARD_HEIGHT,
+      );
     });
   }
 
@@ -257,7 +324,7 @@ export function renderChapterCanvas(
       color: CATEGORY_COLORS[relationship.target.category],
     }];
   });
-  return serializeCanvas(nodes, edges);
+  return serializeCanvas(nodes, edges, `${labels.chapter} ${chapter.number} - ${chapter.label}`);
 }
 
 function addCategoryGroup(
@@ -278,10 +345,14 @@ function addCategoryGroup(
     label,
     color: CATEGORY_COLORS[category],
     x,
-    y: 260,
+    y: CHAPTER_CATEGORY_TOP,
     width,
     height,
   });
+}
+
+function centeredCardX(columnX: number): number {
+  return columnX + (CHAPTER_COLUMN_WIDTH - CHAPTER_CARD_WIDTH) / 2;
 }
 
 function columnContentHeight(
@@ -331,26 +402,83 @@ function normalizedDescription(description: string): string {
   return description.replace(/\r?\n/g, " ");
 }
 
-function overviewInfoText(projectName: string, bookNumber: number | undefined): string {
+function overviewInfoText(project: StoryLineProject, labels: CanvasLabels): string {
   return [
     `# ${[
-      ...(bookNumber === undefined ? [] : [`Buch ${bookNumber}`]),
-      projectName,
-      "Übersicht",
+      ...(project.bookNumber === undefined ? [] : [`${labels.book} ${project.bookNumber}`]),
+      project.name,
+      labels.overview,
     ].join(" - ")}`,
     "",
-    colorInfoText(),
+    colorInfoText(project),
   ].join("\n");
 }
 
-function colorInfoText(): string {
+function chapterInfoText(
+  project: StoryLineProject,
+  chapter: ChapterCanvasDescriptor,
+  overviewPath: string,
+): string {
+  const labels = canvasLabels(project);
+  return [
+    `# ${[
+      ...(project.bookNumber === undefined ? [] : [`${labels.book} ${project.bookNumber}`]),
+      project.name,
+      `${labels.chapter} ${chapter.number}`,
+      chapter.label,
+    ].join(" - ")} &emsp;<small>(back to: **[[${overviewPath}|Canvas]]**)</small>`,
+    "",
+    colorInfoText(project),
+  ].join("\n");
+}
+
+function colorInfoText(project: StoryLineProject): string {
+  const english = isEnglish(project);
   const legend = Object.entries(STORYLINE_STATUS_COLORS)
-    .map(([status, entry]) => `[${entry.name}](cfs-color://${status}) – ${entry.meaning}`)
+    .map(([status, entry]) => (
+      `$\\textcolor{${entry.canvasColor}}{\\textsf{${mathText(english ? englishColorName(status) : entry.name)}}}$ – ${english ? englishStatusMeaning(status) : entry.meaning}`
+    ))
     .join(" - ");
   return [
-    "> [!info] Farbcode aus StoryLine",
+    english ? "> [!info] StoryLine color code" : "> [!info] Farbcode aus StoryLine",
     `> ${legend}`,
   ].join("\n");
+}
+
+interface CanvasLabels {
+  overview: string;
+  chapter: string;
+  act: string;
+  book: string;
+  scenes: string;
+  sceneNotes: string;
+  charactersAndPov: string;
+  locations: string;
+}
+
+function canvasLabels(project: StoryLineProject): CanvasLabels {
+  return isEnglish(project)
+    ? { overview: "Overview", chapter: "Chapter", act: "Act", book: "Book", scenes: "Scenes", sceneNotes: "Scene Notes", charactersAndPov: "Characters and POV", locations: "Locations" }
+    : { overview: "Übersicht", chapter: "Kapitel", act: "Akt", book: "Buch", scenes: "Szenen", sceneNotes: "Szenen-Notizen", charactersAndPov: "Figuren und POV", locations: "Orte" };
+}
+
+function isEnglish(project: StoryLineProject): boolean {
+  return project.language?.toLowerCase().startsWith("en") ?? false;
+}
+
+function englishColorName(status: string): string {
+  return ({ idea: "Gray", outlined: "Blue", draft: "Orange", written: "Green", revised: "Purple", final: "Red" } as Record<string, string>)[status] ?? status;
+}
+
+function englishStatusMeaning(status: string): string {
+  return ({ idea: "Idea", outlined: "Outlined", draft: "Draft", written: "Written", revised: "Revised", final: "Final" } as Record<string, string>)[status] ?? status;
+}
+
+function mathText(value: string): string {
+  return [...value].map((character) => {
+    const codePoint = character.codePointAt(0) ?? 0;
+    return codePoint > 0x7f ? `\\char"${codePoint.toString(16).toUpperCase()}{}` : character;
+  }).join("");
 }
 
 function uniqueActs(chapters: readonly ChapterCanvasDescriptor[]): Array<number | null> {
@@ -416,6 +544,10 @@ function normalizeLinkPath(value: string): string {
   return value.replace(/\\/g, "/").replace(/\.md$/i, "").toLocaleLowerCase("de");
 }
 
-function serializeCanvas(nodes: readonly CanvasNode[], edges: readonly CanvasEdge[]): string {
-  return `${JSON.stringify({ nodes, edges }, null, 2)}\n`;
+function serializeCanvas(
+  nodes: readonly CanvasNode[],
+  edges: readonly CanvasEdge[],
+  name: string,
+): string {
+  return `${JSON.stringify({ nodes, edges, name }, null, 2)}\n`;
 }

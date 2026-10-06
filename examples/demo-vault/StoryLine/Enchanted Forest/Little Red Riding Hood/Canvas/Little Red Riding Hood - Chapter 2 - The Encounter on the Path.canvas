@@ -1,0 +1,153 @@
+{
+  "nodes": [
+    {
+      "id": "651c4d2ded5c1904",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 2 - The Encounter on the Path &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "7056e62a335ff43a",
+      "type": "group",
+      "label": "Chapter 2 · The Encounter on the Path",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 760
+    },
+    {
+      "id": "ff798d6d39f33b3a",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "a66b41111a896f36",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "e9b45e5854449773",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "7acfc410d23dae9f",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "cfs-card-67b1ffbb54b97599",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 1/01-02 The Friendly Stranger.md",
+      "color": "#2196F3",
+      "cfsDescription": "A polite wolf persuades Little Red Riding Hood to reveal her destination and errand.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-58fcb926989460ce",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/The Friendly Stranger - Notes.md",
+      "color": "2",
+      "cfsDescription": "The danger should arise through friendly questions rather than an open threat. Step by step, Little Red Riding Hood reveals the destination, the route, and that no one else is present.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-365d3952f1f7358e",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-560d2f7009a34af2",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Wolf.md",
+      "color": "6",
+      "cfsDescription": "A large gray wolf with yellow eyes, a calm voice, and strikingly polite manners.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-516ce85c69d3d42e",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Forest Path.md",
+      "color": "5",
+      "cfsDescription": "A narrow, clearly visible path between the village and Grandmother's house.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "751b14d232e681db",
+      "fromNode": "cfs-card-67b1ffbb54b97599",
+      "toNode": "cfs-card-58fcb926989460ce",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "f0b7020e0b6fd287",
+      "fromNode": "cfs-card-67b1ffbb54b97599",
+      "toNode": "cfs-card-365d3952f1f7358e",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "3de3a044c7ecf4e7",
+      "fromNode": "cfs-card-67b1ffbb54b97599",
+      "toNode": "cfs-card-560d2f7009a34af2",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "bf652da828cafaa3",
+      "fromNode": "cfs-card-67b1ffbb54b97599",
+      "toNode": "cfs-card-516ce85c69d3d42e",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 2 - The Encounter on the Path"
+}

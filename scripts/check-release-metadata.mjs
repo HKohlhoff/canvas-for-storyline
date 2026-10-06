@@ -9,6 +9,8 @@ const settingsSource = fs.readFileSync("src/ui/settings-tab.ts", "utf8");
 const readme = fs.readFileSync("README.md", "utf8");
 const copyingException = fs.readFileSync("COPYING_EXCEPTION", "utf8");
 const demoPlugins = JSON.parse(fs.readFileSync("examples/demo-vault/.obsidian/community-plugins.json", "utf8"));
+const demoPluginsPath = "examples/demo-vault/.obsidian/plugins";
+const demoCanvasPath = "examples/demo-vault/StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas";
 const errors = [];
 if (manifest.id !== "canvas-for-storyline") errors.push("Unexpected plugin id.");
 if (manifest.name !== "Canvas for StoryLine") errors.push("Unexpected plugin name.");
@@ -19,17 +21,15 @@ if (pkg.license !== "GPL-3.0-or-later") errors.push("Unexpected license.");
 if (!copyingException.includes("Additional permission under GNU GPL version 3 section 7")) {
   errors.push("Generated-output license exception is missing or incomplete.");
 }
-for (const companion of ["canvas-folding", "canvas-html-exporter"]) {
-  if (!demoPlugins.includes(companion)) errors.push(`Demo Vault does not enable ${companion}.`);
-  const demoPluginPath = `examples/demo-vault/.obsidian/plugins/${companion}`;
-  for (const artifact of ["main.js", "manifest.json", "styles.css"]) {
-    if (!fs.existsSync(`${demoPluginPath}/${artifact}`)) {
-      errors.push(`Demo Vault is missing ${companion}/${artifact}.`);
-    }
-  }
-  const demoManifest = JSON.parse(fs.readFileSync(`${demoPluginPath}/manifest.json`, "utf8"));
-  if (demoManifest.id !== companion) errors.push(`Demo Vault contains the wrong ${companion} manifest.`);
+if (!Array.isArray(demoPlugins) || demoPlugins.length !== 0) {
+  errors.push("Demo Vault must not enable Community plugins in its release state.");
 }
+if (fs.existsSync(demoPluginsPath) && fs.readdirSync(demoPluginsPath).length !== 0) {
+  errors.push("Demo Vault must not bundle installed Community plugins.");
+}
+const demoCanvasFiles = fs.readdirSync(demoCanvasPath).filter((file) => file.endsWith(".canvas"));
+if (demoCanvasFiles.length !== 7) errors.push("Demo Vault must contain the overview and six chapter Canvases.");
+if (!fs.existsSync(`${demoCanvasPath}/Master.md`)) errors.push("Demo Vault is missing its generated Master.md.");
 if (!readme.includes("https://github.com/HKohlhoff/canvas-folding")) {
   errors.push("README does not link Canvas Folding.");
 }

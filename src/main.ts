@@ -83,7 +83,7 @@ export default class CanvasForStoryLinePlugin extends Plugin {
     try {
       const project = await readStoryLineProject(this.app.vault, projectPath);
       const plan = kind === "master"
-        ? createMasterGenerationPlan(project, this.settings.masterOutputPath)
+        ? createMasterGenerationPlan(project, this.settings.masterOutputPath, this.settings.masterSceneLinkMode)
         : this.canvasPlan(project);
       const result = await writeGenerationPlan(
         this.app.vault,
@@ -102,8 +102,8 @@ export default class CanvasForStoryLinePlugin extends Plugin {
       const removed = result.removed.length;
       if (result.conflicts.length > 0) {
         new Notice(
-          `Canvas for StoryLine created ${changed} file(s), removed ${removed} obsolete file(s), and found ${result.conflicts.length} blocked output path(s).`,
-          8000,
+          `Canvas for StoryLine created ${changed} file(s), removed ${removed} obsolete file(s), and found ${result.conflicts.length} blocked output path(s):${formatConflictPaths(result.conflicts)}`,
+          12000,
         );
       } else {
         new Notice(`Canvas for StoryLine finished: ${changed} file(s) created, ${removed} obsolete file(s) removed.`);
@@ -117,11 +117,21 @@ export default class CanvasForStoryLinePlugin extends Plugin {
   private canvasPlan(project: Awaited<ReturnType<typeof readStoryLineProject>>): GenerationPlan {
     const canvasPlan = createCanvasGenerationPlan(project, this.settings.includedCategories);
     if (!this.settings.createMasterWithCanvases) return canvasPlan;
-    const masterPlan = createMasterGenerationPlan(project, this.settings.masterOutputPath);
+    const masterPlan = createMasterGenerationPlan(
+      project,
+      this.settings.masterOutputPath,
+      this.settings.masterSceneLinkMode,
+    );
     return { ...canvasPlan, artifacts: [...canvasPlan.artifacts, ...masterPlan.artifacts] };
   }
 }
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function formatConflictPaths(paths: readonly string[]): string {
+  const visible = paths.slice(0, 3).map((path) => `\n• ${path}`).join("");
+  const remaining = paths.length - 3;
+  return remaining > 0 ? `${visible}\n• … and ${remaining} more` : visible;
 }

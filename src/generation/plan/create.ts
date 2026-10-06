@@ -1,4 +1,5 @@
 import type { StoryLineCategory, StoryLineElement, StoryLineProject } from "../../model/storyline";
+import type { MasterSceneLinkMode } from "../../settings-data";
 import { normalizeVaultPath } from "../../vault/path";
 import {
   renderChapterCanvas,
@@ -14,10 +15,11 @@ export function createGenerationPlan(
   includedCategories: Readonly<Record<StoryLineCategory, boolean>>,
   includeMaster = true,
   masterOutputPath = "",
+  masterSceneLinkMode: MasterSceneLinkMode = "wikilinks",
 ): GenerationPlan {
   const canvasPlan = createCanvasGenerationPlan(project, includedCategories);
   if (!includeMaster) return canvasPlan;
-  const masterPlan = createMasterGenerationPlan(project, masterOutputPath);
+  const masterPlan = createMasterGenerationPlan(project, masterOutputPath, masterSceneLinkMode);
   return { ...canvasPlan, artifacts: [...canvasPlan.artifacts, ...masterPlan.artifacts] };
 }
 
@@ -31,7 +33,10 @@ export function createCanvasGenerationPlan(
     .slice()
     .sort(compareStoryLineElements);
   const documentName = project.name;
-  const overviewPath = normalizeVaultPath(`${outputPath}/${safeFileName(`${documentName} - Übersicht`)}.canvas`);
+  const english = isEnglish(project);
+  const overviewLabel = english ? "Overview" : "Übersicht";
+  const chapterLabel = english ? "Chapter" : "Kapitel";
+  const overviewPath = normalizeVaultPath(`${outputPath}/${safeFileName(`${documentName} - ${overviewLabel}`)}.canvas`);
   const usedPaths = new Set([overviewPath].map((path) => path.toLocaleLowerCase("de")));
   const chapterNumbers = [...new Set(
     selected
@@ -41,7 +46,7 @@ export function createCanvasGenerationPlan(
   const chapters: ChapterCanvasDescriptor[] = chapterNumbers.map((number) => {
     const scenes = selected.filter((element) => element.category === "scenes" && element.chapter === number);
     const label = project.chapterLabels[number] ?? number;
-    const fileName = safeFileName(`${documentName} - Kapitel ${number} - ${label}`);
+    const fileName = safeFileName(`${documentName} - ${chapterLabel} ${number} - ${label}`);
     return {
       number,
       label,
@@ -64,7 +69,15 @@ export function createCanvasGenerationPlan(
   return { projectPath: project.rootPath, outputPath, artifacts };
 }
 
-export function createMasterGenerationPlan(project: StoryLineProject, configuredOutputPath = ""): GenerationPlan {
+function isEnglish(project: StoryLineProject): boolean {
+  return project.language?.toLowerCase().startsWith("en") ?? false;
+}
+
+export function createMasterGenerationPlan(
+  project: StoryLineProject,
+  configuredOutputPath = "",
+  sceneLinkMode: MasterSceneLinkMode = "wikilinks",
+): GenerationPlan {
   const outputPath = configuredOutputPath
     ? normalizeVaultPath(configuredOutputPath)
     : normalizeVaultPath(`${project.rootPath}/Canvas`);
@@ -77,7 +90,7 @@ export function createMasterGenerationPlan(project: StoryLineProject, configured
     outputPath,
     artifacts: [{
       path: normalizeVaultPath(`${outputPath}/Master.md`),
-      content: renderMaster(project, scenes),
+      content: renderMaster(project, scenes, new Date(), sceneLinkMode),
     }],
   };
 }

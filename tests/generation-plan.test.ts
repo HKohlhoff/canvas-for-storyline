@@ -38,9 +38,11 @@ test("plans overview, chapter canvas, and master in the direct Canvas folder", (
     "Romane/Projekt M/Canvas/Master.md",
   ]);
   const overview = JSON.parse(plan.artifacts[0]?.content ?? "{}") as {
+    name?: string;
     nodes: Array<{ id: string; type: string }>;
     edges: Array<{ id: string; fromNode: string; toNode: string }>;
   };
+  assert.equal(overview.name, "Übersicht");
   assert.equal(overview.nodes.length, 3);
   assert.equal(new Set(overview.nodes.map((node) => node.id)).size, overview.nodes.length);
   assert.equal(new Set(overview.edges.map((edge) => edge.id)).size, overview.edges.length);
@@ -53,9 +55,11 @@ test("plans overview, chapter canvas, and master in the direct Canvas folder", (
   assert.equal(overviewHeaderNode?.height, 200);
   assert.equal(overviewHeader.split("\n")[0], "# Buch 1 - Projekt M - Übersicht");
   assert.match(overviewHeader, /> \[!info\] Farbcode aus StoryLine/);
-  assert.match(overviewHeader, /\[Grau\]\(cfs-color:\/\/idea\) – Idea \(Idee\)/);
-  assert.match(overviewHeader, /\[Rot\]\(cfs-color:\/\/final\) – Final \(fertig\)/);
-  assert.doesNotMatch(overviewHeader, /<span|<strong/);
+  assert.match(overviewHeader, /\$\\textcolor\{#9E9E9E\}\{\\textsf\{Grau\}\}\$ – Idea \(Idee\)/);
+  assert.match(overviewHeader, /\\textcolor\{#4CAF50\}\{\\textsf\{Gr\\char"FC\{\}n\}\}/);
+  assert.doesNotMatch(overviewHeader, /\\textsf\{Grün\}/);
+  assert.match(overviewHeader, /\$\\textcolor\{#F44336\}\{\\textsf\{Rot\}\}\$ – Final \(fertig\)/);
+  assert.doesNotMatch(overviewHeader, /cfs-color:\/\/|<span/);
   const master = plan.artifacts[plan.artifacts.length - 1]?.content ?? "";
   assert.match(master, /> \[!info\] Quellen und Erstellung/);
   assert.equal(master.startsWith("> [!info] Quellen und Erstellung\n"), true);
@@ -67,6 +71,7 @@ test("plans overview, chapter canvas, and master in the direct Canvas folder", (
   assert.match(master, /### Ankunft\n\[\[Romane\/Projekt M\/Szenen\/Ankunft\]\]/);
   assert.doesNotMatch(master, /<!--/);
   const chapter = JSON.parse(plan.artifacts[1]?.content ?? "{}") as {
+    name?: string;
     nodes: Array<{
       type: string;
       label?: string;
@@ -81,6 +86,7 @@ test("plans overview, chapter canvas, and master in the direct Canvas folder", (
       height: number;
     }>;
   };
+  assert.equal(chapter.name, "Kapitel 1 - Leerheit");
   const categoryLabels = new Set(["Kapitel 1 · Leerheit", "Szenen", "Szenen-Notizen", "Figuren und POV", "Orte"]);
   assert.deepEqual(
     chapter.nodes
@@ -108,24 +114,100 @@ test("plans overview, chapter canvas, and master in the direct Canvas folder", (
   const overviewCard = overviewLayout.find((node) => node.file?.endsWith("Projekt M - Kapitel 1 - Leerheit.canvas"));
   assert.ok(overviewCard);
   assert.equal(overviewCard.cfsDescription, "Leere Menge sucht ihren Platz.");
-  assert.equal(overviewLayout.find((node) => node.type === "group")?.height, 340);
+  const overviewGroup = overviewLayout.find((node) => node.type === "group");
+  assert.equal(overviewGroup?.height, 360);
+  assert.equal(overviewGroup?.y, 290);
+  assert.equal(overviewCard.y, 360);
+  assert.equal(overviewCard.y - (overviewGroup?.y ?? 0), 70);
+  assert.equal((overviewGroup?.y ?? 0) - (overviewHeaderNode?.height ?? 0), 90);
   const chapterNavigation = chapter.nodes.find((node) => node.file?.endsWith("Übersicht.canvas"));
-  assert.equal(chapterNavigation?.label, "← Übersicht");
+  assert.equal(chapterNavigation, undefined);
   const chapterColorInfo = chapter.nodes.find((node) => node.text?.includes("Farbcode aus StoryLine"));
   assert.ok(chapterColorInfo);
-  assert.equal(chapterColorInfo.x - ((chapterNavigation?.x ?? 0) + (chapterNavigation?.width ?? 0)), 80);
-  assert.equal(chapterColorInfo.y, chapterNavigation?.y);
-  assert.equal(chapterColorInfo.height, chapterNavigation?.height);
-  assert.match(chapterColorInfo.text ?? "", /\[Grau\]\(cfs-color:\/\/idea\)/);
-  assert.match(chapterColorInfo.text ?? "", /\[Rot\]\(cfs-color:\/\/final\)/);
+  assert.equal(chapterColorInfo.x, 0);
+  assert.equal(chapterColorInfo.x + chapterColorInfo.width, 2560);
+  assert.equal(chapterColorInfo.y, 0);
+  assert.equal(chapterColorInfo.height, 200);
+  assert.equal(
+    chapterColorInfo.text?.split("\n")[0],
+    "# Buch 1 - Projekt M - Kapitel 1 - Leerheit &emsp;<small>(back to: **[[Romane/Projekt M/Canvas/Projekt M - Übersicht.canvas|Canvas]]**)</small>",
+  );
+  assert.doesNotMatch(chapterColorInfo.text ?? "", /\[!info\][^\n]*back to:/);
+  assert.match(chapterColorInfo.text ?? "", /\\textcolor\{#9E9E9E\}\{\\textsf\{Grau\}\}/);
+  assert.match(chapterColorInfo.text ?? "", /\\textcolor\{#F44336\}\{\\textsf\{Rot\}\}/);
   const categoryGroups = chapter.nodes.filter(
     (node) => node.type === "group" && node.label !== "Kapitel 1 · Leerheit",
   );
-  assert.deepEqual(categoryGroups.map((node) => node.height), [420, 420, 420, 420]);
+  assert.deepEqual(categoryGroups.map((node) => node.height), [320, 320, 320, 320]);
   assert.equal(
     chapter.nodes.find((node) => node.label === "Kapitel 1 · Leerheit")?.height,
-    580,
+    480,
   );
+  const chapterGroup = chapter.nodes.find((node) => node.label === "Kapitel 1 · Leerheit");
+  assert.equal(chapterGroup?.x, 0);
+  assert.equal(chapterGroup?.width, 2560);
+  assert.equal(chapterGroup?.y, 290);
+  assert.equal(
+    (chapterGroup?.y ?? 0) - ((chapterColorInfo.y ?? 0) + (chapterColorInfo.height ?? 0)),
+    90,
+  );
+});
+
+test("uses uniform compact chapter columns and cards", () => {
+  const [scene, note, character, location] = project.elements;
+  assert.ok(scene);
+  assert.ok(note);
+  assert.ok(character);
+  assert.ok(location);
+  const plan = createCanvasGenerationPlan({
+    ...project,
+    elements: [{
+      ...scene,
+      notesFile: note.sourcePath,
+      characters: [character.sourcePath],
+      locations: [location.sourcePath],
+    }, note, character, location],
+  }, {
+    scenes: true, sceneNotes: true, characters: true, locations: true,
+  });
+  const overview = JSON.parse(plan.artifacts[0]?.content ?? "{}") as {
+    nodes: Array<{ type: string; width: number }>;
+  };
+  assert.deepEqual(
+    overview.nodes.filter((node) => node.type === "group").map((node) => node.width),
+    [560],
+  );
+  const chapter = JSON.parse(plan.artifacts[1]?.content ?? "{}") as {
+    nodes: Array<{
+      type: string;
+      label?: string;
+      file?: string;
+      x: number;
+      width: number;
+      height: number;
+    }>;
+  };
+  const groups = chapter.nodes.filter(
+    (node) => ["Szenen", "Szenen-Notizen", "Figuren und POV", "Orte"].includes(node.label ?? ""),
+  );
+  assert.deepEqual(groups.map((group) => group.width), [540, 540, 540, 540]);
+  assert.deepEqual(groups.slice(1).map((group, index) => (
+    group.x - ((groups[index]?.x ?? 0) + (groups[index]?.width ?? 0))
+  )), [80, 80, 80]);
+  const cards = chapter.nodes.filter((node) => node.type === "file");
+  assert.deepEqual(cards.map((card) => [card.width, card.height]), [
+    [460, 240],
+    [460, 240],
+    [460, 240],
+    [460, 240],
+  ]);
+  for (const group of groups) {
+    const card = cards.find((node) => (
+      node.type === "file" && node.x >= group.x && node.x < group.x + group.width
+    ));
+    assert.ok(card);
+    assert.equal(card.x - group.x, group.x + group.width - (card.x + card.width));
+  }
 });
 
 test("master output contains only scene links without embeds", () => {
@@ -138,7 +220,14 @@ test("master output contains only scene links without embeds", () => {
   assert.doesNotMatch(master, /Mara|Akademie|Hinweis/);
 });
 
-test("uses the overview's 100-unit free vertical gap on chapter cards", () => {
+test("master output can embed scenes instead of linking them", () => {
+  const plan = createMasterGenerationPlan(project, "", "embeds");
+  const master = plan.artifacts[0]?.content ?? "";
+  assert.match(master, /!\[\[Romane\/Projekt M\/Szenen\/Ankunft\]\]/);
+  assert.doesNotMatch(master, /\n\[\[Romane\/Projekt M\/Szenen\/Ankunft\]\]/);
+});
+
+test("uses the column padding as the vertical gap between chapter cards", () => {
   const plan = createCanvasGenerationPlan({
     ...project,
     elements: [
@@ -163,11 +252,42 @@ test("uses the overview's 100-unit free vertical gap on chapter cards", () => {
   const second = chapter.nodes.find((node) => node.file?.endsWith("Begegnung.md"));
   assert.ok(first);
   assert.ok(second);
-  assert.equal(second.y - (first.y + first.height), 100);
+  assert.equal(second.y - (first.y + first.height), 40);
   const columnHeights = chapter.nodes
     .filter((node) => ["Szenen", "Szenen-Notizen", "Figuren und POV", "Orte"].includes(node.label ?? ""))
     .map((node) => node.height);
-  assert.deepEqual(columnHeights, [760, 760, 760, 760]);
+  assert.deepEqual(columnHeights, [600, 600, 600, 600]);
+});
+
+test("aligns the first card in every chapter column at the top", () => {
+  const [scene, note, character, location] = project.elements;
+  assert.ok(scene);
+  assert.ok(note);
+  assert.ok(character);
+  assert.ok(location);
+  const plan = createCanvasGenerationPlan({
+    ...project,
+    elements: [
+      {
+        ...scene,
+        notesFile: note.sourcePath,
+        characters: [character.sourcePath],
+        locations: [location.sourcePath],
+      },
+      note,
+      character,
+      location,
+    ],
+  }, {
+    scenes: true, sceneNotes: true, characters: true, locations: true,
+  });
+  const chapter = JSON.parse(plan.artifacts[1]?.content ?? "{}") as {
+    nodes: Array<{ type?: string; file?: string; y: number }>;
+  };
+  const cardYPositions = chapter.nodes
+    .filter((node) => node.type === "file")
+    .map((node) => node.y);
+  assert.deepEqual(cardYPositions, [410, 410, 410, 410]);
 });
 
 test("uses the longest act column height for every overview column", () => {
@@ -184,11 +304,35 @@ test("uses the longest act column height for every overview column", () => {
     scenes: true, sceneNotes: true, characters: true, locations: true,
   });
   const overview = JSON.parse(plan.artifacts[0]?.content ?? "{}") as {
-    nodes: Array<{ type: string; height: number }>;
+    nodes: Array<{
+      type: string;
+      file?: string;
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    }>;
   };
+  const overviewInfo = overview.nodes.find((node) => node.type === "text");
+  const actGroups = overview.nodes.filter((node) => node.type === "group");
+  assert.ok(overviewInfo);
+  assert.equal(overviewInfo.x, Math.min(...actGroups.map((group) => group.x)));
+  assert.equal(
+    overviewInfo.x + overviewInfo.width,
+    Math.max(...actGroups.map((group) => group.x + group.width)),
+  );
   assert.deepEqual(
-    overview.nodes.filter((node) => node.type === "group").map((node) => node.height),
-    [980, 980],
+    actGroups.map((node) => node.height),
+    [940, 940],
+  );
+  const actOneCards = overview.nodes
+    .filter((node) => node.type === "file" && !node.file?.includes("Kapitel 4"))
+    .sort((left, right) => left.y - right.y);
+  assert.deepEqual(
+    actOneCards.slice(1).map((card, index) => (
+      card.y - ((actOneCards[index]?.y ?? 0) + (actOneCards[index]?.height ?? 0))
+    )),
+    [70, 70],
   );
 });
 

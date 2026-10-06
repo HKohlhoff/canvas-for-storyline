@@ -1,36 +1,54 @@
-# DemoVault für Canvas for StoryLine
+# Canvas for StoryLine Demo Vault
 
-Dieser kleine Obsidian-Vault enthält ein vollständiges StoryLine-Beispielprojekt
-für das Märchen **Rotkäppchen**. Die Nacherzählung wurde eigens für diesen
-DemoVault formuliert.
+This small Obsidian Vault contains a complete StoryLine example project based
+on **Little Red Riding Hood**. The adaptation was written specifically for this
+demo and is not copied from an existing edition.
 
-## Ausprobieren
+## Try the demo
 
-1. Diesen Ordner in Obsidian als Vault öffnen.
-2. **Canvas Folding** und **Canvas HTML Exporter** sind in diesem DemoVault
-   bereits mit ihren Release-Dateien installiert und aktiviert. Canvas for
-   StoryLine installieren beziehungsweise als lokales Plugin laden.
-3. Unter **Einstellungen → Canvas for StoryLine** als StoryLine-Projektordner
-   `StoryLine/Märchenwald/Rotkäppchen` wählen.
-4. Alle vier Elementtypen aktiviert lassen.
-5. Den Befehl **Canvas for StoryLine: Create StoryLine Canvas files** ausführen.
-6. Die erzeugten Dateien unter
-   `StoryLine/Märchenwald/Rotkäppchen/Canvas` öffnen.
-7. Im erzeugten Übersichts-Canvas mit Canvas Folding Zweige ein- und ausklappen.
-8. Das Übersichts-Canvas mit Canvas HTML Exporter als verknüpfte interaktive
-   HTML-Publikation exportieren.
+1. Open this folder as a Vault in Obsidian.
+2. Install and enable **StoryLine** and **Canvas for StoryLine** from Community
+   Plugins. The demo intentionally ships without installed plugins.
+3. Optionally install **Canvas Folding** and **Canvas HTML Exporter** to try the
+   complete interactive Canvas and browser workflow.
+4. Inspect the pre-generated overview, six chapter Canvases, and `Master.md`
+   under `StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas`.
+5. In **Settings → Canvas for StoryLine**, select
+   `StoryLine/Enchanted Forest/Little Red Riding Hood` as the StoryLine project folder.
+6. Keep all four element types enabled.
+7. Run **Canvas for StoryLine: Create StoryLine Canvas files**. Existing
+   same-named output is moved to Obsidian's configured trash and recreated.
+8. Open the regenerated files in the project's `Canvas` folder.
+9. With Canvas Folding installed, collapse and expand branches in the overview.
+10. With Canvas HTML Exporter installed, export the overview as a connected,
+    interactive, browser-friendly HTML view.
 
-Das Beispiel zeigt drei Akte, sechs Kapitel, alle sechs Szenenstatus,
-Szenen-Notizen sowie verknüpfte Figuren und Orte aus einem gemeinsamen
-Serien-Codex. `Master.md` wird beim Erzeugen der Canvas-Dateien ebenfalls
-angelegt, sofern die Standardeinstellung nicht geändert wurde.
+The chapter Canvas cards provide the complete contents of their referenced
+Markdown files, not only titles or summaries. The exported HTML pages likewise
+contain the complete rendered Markdown content for the corresponding scenes,
+scene notes, characters, and locations.
 
-Die drei Plugins ergänzen sich dabei als Arbeitskette: Canvas for StoryLine
-erzeugt die Buchstruktur, Canvas Folding macht sie in Obsidian übersichtlich,
-und Canvas HTML Exporter veröffentlicht Übersicht und Kapitel als navigierbares
-Gesamtwerk außerhalb von Obsidian.
+The example contains three acts, six chapters, all six scene statuses, scene
+notes, and linked characters and locations from a shared series Codex.
+`Master.md` is generated together with the Canvas files unless that setting is
+disabled.
 
-> [!warning] Generierte Dateien
-> Der Ordner `Canvas` ist Ausgabe des Plugins. Änderungen darin können beim
-> nächsten Erzeugen ersetzt werden. Die Quelldateien außerhalb dieses Ordners
-> bleiben unverändert.
+The project uses StoryLine 1.10.80's native structure:
+
+- `Scenes/Act N` for scenes with native file names and global sequence values;
+- `SceneNotes/` for notes linked from the scene inspector;
+- `Codex/Characters` and `Codex/Locations` as the shared series Codex;
+- `Notes`, `Research`, `Archive`, and `System` inside the book folder;
+- StoryLine references for POV, characters, locations, setup/payoff,
+  relationships, inhabitants, connected locations, plotlines, and book and
+  series identities.
+
+Canvas for StoryLine creates the connected book structure, Canvas Folding makes
+it easier to explore in Obsidian, and Canvas HTML Exporter turns the overview
+and chapters into a navigable browser view outside Obsidian. Each plugin
+remains independent and must be installed separately.
+
+> [!warning] Generated files
+> The `Canvas` folder is plugin output. Existing same-named target files are
+> moved to Obsidian's configured trash and recreated when generation runs.
+> Source files outside the `Canvas` folder are never changed.

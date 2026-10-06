@@ -17,6 +17,7 @@ export interface StoryLineElement {
 
 export interface StoryLineProject {
   name: string;
+  language?: string;
   vaultName?: string;
   seriesName?: string;
   bookNumber?: number;
