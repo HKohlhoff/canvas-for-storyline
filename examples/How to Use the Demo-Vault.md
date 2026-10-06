@@ -6,21 +6,22 @@ demo and is not copied from an existing edition.
 
 ## Try the demo
 
-1. Open this folder as a Vault in Obsidian.
-2. Install and enable **StoryLine** and **Canvas for StoryLine** from Community
+1. Download or clone this repository.
+2. Open `examples/demo-vault` as a Vault in Obsidian.
+3. Install and enable **StoryLine** and **Canvas for StoryLine** from Community
    Plugins. The demo intentionally ships without installed plugins.
-3. Optionally install **Canvas Folding** and **Canvas HTML Exporter** to try the
+4. Optionally install **Canvas Folding** and **Canvas HTML Exporter** to try the
    complete interactive Canvas and browser workflow.
-4. Inspect the pre-generated overview, six chapter Canvases, and `Master.md`
+5. Inspect the pre-generated overview, six chapter Canvases, and `Master.md`
    under `StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas`.
-5. In **Settings → Canvas for StoryLine**, select
+6. In **Settings → Canvas for StoryLine**, select
    `StoryLine/Enchanted Forest/Little Red Riding Hood` as the StoryLine project folder.
-6. Keep all four element types enabled.
-7. Run **Canvas for StoryLine: Create StoryLine Canvas files**. Existing
+7. Keep all four element types enabled.
+8. Run **Canvas for StoryLine: Create StoryLine Canvas files**. Existing
    same-named output is moved to Obsidian's configured trash and recreated.
-8. Open the regenerated files in the project's `Canvas` folder.
-9. With Canvas Folding installed, collapse and expand branches in the overview.
-10. With Canvas HTML Exporter installed, export the overview as a connected,
+9. Open the regenerated files in the project's `Canvas` folder.
+10. With Canvas Folding installed, collapse and expand branches in the overview.
+11. With Canvas HTML Exporter installed, export the overview as a connected,
     interactive, browser-friendly HTML view.
 
 The chapter Canvas cards provide the complete contents of their referenced
