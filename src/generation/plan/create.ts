@@ -1,11 +1,29 @@
 import type { StoryLineCategory, StoryLineElement, StoryLineProject } from "../../model/storyline";
+import type { MasterSceneLinkMode } from "../../settings-data";
 import { normalizeVaultPath } from "../../vault/path";
-import { renderChapterCanvas, renderElementCanvas } from "../canvas/render";
+import {
+  renderChapterCanvas,
+  renderOverviewCanvas,
+  type ChapterCanvasDescriptor,
+} from "../canvas/render";
 import { stableId } from "../identity";
 import { renderMaster } from "../master/render";
 import type { GenerationPlan } from "./types";
 
 export function createGenerationPlan(
+  project: StoryLineProject,
+  includedCategories: Readonly<Record<StoryLineCategory, boolean>>,
+  includeMaster = true,
+  masterOutputPath = "",
+  masterSceneLinkMode: MasterSceneLinkMode = "wikilinks",
+): GenerationPlan {
+  const canvasPlan = createCanvasGenerationPlan(project, includedCategories);
+  if (!includeMaster) return canvasPlan;
+  const masterPlan = createMasterGenerationPlan(project, masterOutputPath, masterSceneLinkMode);
+  return { ...canvasPlan, artifacts: [...canvasPlan.artifacts, ...masterPlan.artifacts] };
+}
+
+export function createCanvasGenerationPlan(
   project: StoryLineProject,
   includedCategories: Readonly<Record<StoryLineCategory, boolean>>,
 ): GenerationPlan {
@@ -14,37 +32,70 @@ export function createGenerationPlan(
     .filter((element) => includedCategories[element.category])
     .slice()
     .sort(compareStoryLineElements);
-  const overviewArtifact = {
-    path: normalizeVaultPath(`${outputPath}/Übersicht.canvas`),
-    content: renderElementCanvas(`${project.name} – Übersicht`, selected),
-  };
-  const masterArtifact = {
-    path: normalizeVaultPath(`${outputPath}/Master.md`),
-    content: renderMaster(project, selected),
-  };
-  const artifacts = [overviewArtifact];
-  const usedPaths = new Set(
-    [overviewArtifact.path, masterArtifact.path].map((path) => path.toLocaleLowerCase("de")),
-  );
-  const chapters = [...new Set(
+  const documentName = project.name;
+  const english = isEnglish(project);
+  const overviewLabel = english ? "Overview" : "Übersicht";
+  const chapterLabel = english ? "Chapter" : "Kapitel";
+  const overviewPath = normalizeVaultPath(`${outputPath}/${safeFileName(`${documentName} - ${overviewLabel}`)}.canvas`);
+  const usedPaths = new Set([overviewPath].map((path) => path.toLocaleLowerCase("de")));
+  const chapterNumbers = [...new Set(
     selected
       .filter((element) => element.category === "scenes" && element.chapter)
       .map((element) => element.chapter as string),
   )].sort(naturalCompare);
+  const chapters: ChapterCanvasDescriptor[] = chapterNumbers.map((number) => {
+    const scenes = selected.filter((element) => element.category === "scenes" && element.chapter === number);
+    const label = project.chapterLabels[number] ?? number;
+    const fileName = safeFileName(`${documentName} - ${chapterLabel} ${number} - ${label}`);
+    return {
+      number,
+      label,
+      ...(project.chapterDescriptions[number] ? { description: project.chapterDescriptions[number] } : {}),
+      act: scenes.find((scene) => scene.act !== undefined)?.act ?? null,
+      path: reserveChapterPath(outputPath, fileName, usedPaths),
+    };
+  });
+  const artifacts = [{
+    path: overviewPath,
+    content: renderOverviewCanvas(project, chapters),
+  }];
   for (const chapter of chapters) {
-    const elements = selected.filter((element) => element.category === "scenes" && element.chapter === chapter);
-    const path = reserveChapterPath(outputPath, chapter, usedPaths);
+    const scenes = selected.filter((element) => element.category === "scenes" && element.chapter === chapter.number);
     artifacts.push({
-      path,
-      content: renderChapterCanvas(`${project.name} – ${chapter}`, elements, selected),
+      path: chapter.path,
+      content: renderChapterCanvas(project, chapter, scenes, selected, includedCategories, overviewPath),
     });
   }
-  artifacts.push(masterArtifact);
   return { projectPath: project.rootPath, outputPath, artifacts };
 }
 
-function reserveChapterPath(outputPath: string, chapter: string, usedPaths: Set<string>): string {
-  const baseName = safeFileName(chapter);
+function isEnglish(project: StoryLineProject): boolean {
+  return project.language?.toLowerCase().startsWith("en") ?? false;
+}
+
+export function createMasterGenerationPlan(
+  project: StoryLineProject,
+  configuredOutputPath = "",
+  sceneLinkMode: MasterSceneLinkMode = "wikilinks",
+): GenerationPlan {
+  const outputPath = configuredOutputPath
+    ? normalizeVaultPath(configuredOutputPath)
+    : normalizeVaultPath(`${project.rootPath}/Canvas`);
+  const scenes = project.elements
+    .filter((element) => element.category === "scenes")
+    .slice()
+    .sort(compareStoryLineElements);
+  return {
+    projectPath: project.rootPath,
+    outputPath,
+    artifacts: [{
+      path: normalizeVaultPath(`${outputPath}/Master.md`),
+      content: renderMaster(project, scenes, new Date(), sceneLinkMode),
+    }],
+  };
+}
+
+function reserveChapterPath(outputPath: string, baseName: string, usedPaths: Set<string>): string {
   let suffix = "";
   let attempt = 0;
   while (true) {
@@ -55,13 +106,17 @@ function reserveChapterPath(outputPath: string, chapter: string, usedPaths: Set<
       return path;
     }
     attempt += 1;
-    const identity = stableId("chapter-output", chapter, String(attempt)).slice(0, 8);
+    const identity = stableId("chapter-output", baseName, String(attempt)).slice(0, 8);
     suffix = `--${identity}`;
   }
 }
 
 export function safeFileName(value: string): string {
-  const cleaned = value.replace(/[\\/:*?"<>|#^[\]]/g, "-").replace(/\s+/g, " ").trim();
+  const cleaned = value
+    .replace(/\?/g, "")
+    .replace(/[\\/:*"<>|#^[\]]/g, "-")
+    .replace(/\s+/g, " ")
+    .trim();
   return cleaned || "Ohne Kapitel";
 }
 

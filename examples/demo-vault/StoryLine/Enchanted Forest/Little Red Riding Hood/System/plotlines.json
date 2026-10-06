@@ -1,0 +1,19 @@
+{
+  "tagColors": {
+    "Family": "#D97706",
+    "Errand": "#2563EB",
+    "Temptation": "#7C3AED",
+    "Danger": "#DC2626",
+    "Race": "#EA580C",
+    "Recognition": "#0891B2",
+    "Rescue": "#16A34A",
+    "Turning Point": "#9333EA",
+    "Homecoming": "#4F46E5"
+  },
+  "tagTypeOverrides": {},
+  "plotlineDescriptions": {
+    "Family": "Care and responsibility across three generations.",
+    "Danger": "The wolf's plan and Little Red Riding Hood's growing recognition.",
+    "Rescue": "From the huntsman's intervention to the safe journey home."
+  }
+}

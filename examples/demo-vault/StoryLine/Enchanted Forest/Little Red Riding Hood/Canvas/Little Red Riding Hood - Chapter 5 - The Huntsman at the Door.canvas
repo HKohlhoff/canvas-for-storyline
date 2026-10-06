@@ -1,0 +1,191 @@
+{
+  "nodes": [
+    {
+      "id": "5e1c4228e25c07b3",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 5 - The Huntsman at the Door &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "6b56de4b2e5fec5b",
+      "type": "group",
+      "label": "Chapter 5 · The Huntsman at the Door",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 1320
+    },
+    {
+      "id": "185493829ff5f3f3",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 1160
+    },
+    {
+      "id": "89ef496a8dd42987",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 1160
+    },
+    {
+      "id": "2d1fdce794a8e8d2",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 1160
+    },
+    {
+      "id": "6cf464d92a04048c",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 1160
+    },
+    {
+      "id": "cfs-card-9f5e24fead831166",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 3/03-05 The Huntsman Hears Snoring.md",
+      "color": "#9C27B0",
+      "cfsDescription": "An unusual sound leads the huntsman to the house just in time.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-61dd2aefeb1a711f",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/The Huntsman Hears Snoring - Notes.md",
+      "color": "2",
+      "cfsDescription": "The loud snoring gives the passing huntsman a believable reason to enter the house. The rescue should feel swift and fairy-tale-like rather than graphic.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-77bcfa4483b07bfa",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Huntsman.md",
+      "color": "6",
+      "cfsDescription": "An attentive woodsman with a green coat, sturdy shoes, and a working knife.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-26f4aa577d39d2c9",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Wolf.md",
+      "color": "6",
+      "cfsDescription": "A large gray wolf with yellow eyes, a calm voice, and strikingly polite manners.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-fe2095052518abe1",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 970,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-87e70f178791d251",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Grandmother.md",
+      "color": "6",
+      "cfsDescription": "An older woman with silver hair, a white nightcap, and a warm wool jacket.",
+      "x": 1360,
+      "y": 1250,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-7ef05d0aa6ece206",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Grandmother's House.md",
+      "color": "5",
+      "cfsDescription": "A small house beneath three oaks at the forest's edge, with a living kitchen and a darkened bedroom.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "c66c275f9596560e",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-61dd2aefeb1a711f",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "647f9c349ab0932f",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-77bcfa4483b07bfa",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "e1fe43c7dc285280",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-26f4aa577d39d2c9",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "64b75635f60ed11c",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-fe2095052518abe1",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "344245272cfccf68",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-87e70f178791d251",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "70ff9d3a5d6681b7",
+      "fromNode": "cfs-card-9f5e24fead831166",
+      "toNode": "cfs-card-7ef05d0aa6ece206",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 5 - The Huntsman at the Door"
+}

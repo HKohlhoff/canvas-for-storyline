@@ -1,4 +1,9 @@
-import type { StoryLineCategory, StoryLineElement, StoryLineProject } from "../model/storyline";
+import type {
+  StoryLineCategory,
+  StoryLineElement,
+  StoryLineProject,
+  StoryLineSeriesContext,
+} from "../model/storyline";
 import { stableId } from "../generation/identity";
 
 export interface StoryLineSourceDocument {
@@ -20,8 +25,10 @@ const FOLDER_CATEGORIES: ReadonlyArray<readonly [RegExp, StoryLineCategory]> = [
 export function parseStoryLineProject(
   rootPath: string,
   documents: readonly StoryLineSourceDocument[],
+  seriesContext: StoryLineSeriesContext = {},
 ): StoryLineProject {
   const normalizedRoot = rootPath.replace(/\/+$/g, "");
+  const projectMetadata = findProjectMetadata(documents);
   const elements = documents
     .filter((document) => document.path.toLowerCase().endsWith(".md"))
     .filter((document) => !isGeneratedCanvasPath(normalizedRoot, document.path))
@@ -30,9 +37,17 @@ export function parseStoryLineProject(
     .sort((left, right) => left.sourcePath.localeCompare(right.sourcePath, "de"));
   const rootSegments = normalizedRoot.split("/");
   return {
-    name: rootSegments[rootSegments.length - 1] ?? normalizedRoot,
+    name: projectMetadata.title ?? rootSegments[rootSegments.length - 1] ?? normalizedRoot,
+    ...optionalString("language", projectMetadata.language),
+    ...optionalString("vaultName", seriesContext.vaultName),
+    ...optionalString("seriesName", seriesContext.seriesName ?? projectMetadata.seriesId),
+    ...(seriesContext.bookNumber === undefined ? {} : { bookNumber: seriesContext.bookNumber }),
     rootPath: normalizedRoot,
     elements,
+    actLabels: projectMetadata.actLabels ?? {},
+    actDescriptions: projectMetadata.actDescriptions ?? {},
+    chapterLabels: projectMetadata.chapterLabels ?? {},
+    chapterDescriptions: projectMetadata.chapterDescriptions ?? {},
   };
 }
 
@@ -42,29 +57,48 @@ export function isGeneratedCanvasPath(rootPath: string, path: string): boolean {
 }
 
 function parseElement(rootPath: string, document: StoryLineSourceDocument): StoryLineElement | null {
-  const relativePath = document.path.slice(rootPath.length).replace(/^\/+/, "");
+  const relativePath = document.path.startsWith(`${rootPath}/`)
+    ? document.path.slice(rootPath.length).replace(/^\/+/, "")
+    : document.path;
   const frontmatter = readFrontmatter(document.content);
   const category = categoryFromType(frontmatter.type) ?? categoryFromPath(relativePath);
   if (!category) return null;
   const pathSegments = relativePath.split("/");
   const basename = pathSegments[pathSegments.length - 1]?.replace(/\.md$/i, "") ?? relativePath;
-  const title = frontmatter.title ?? frontmatter.name ?? firstHeading(document.content) ?? basename;
+  const title = frontmatter.title
+    ?? frontmatter.name
+    ?? (category === "sceneNotes" ? basename : firstHeading(document.content))
+    ?? basename;
   const chapter = frontmatter.chapter ?? chapterFromPath(relativePath);
   return {
     id: stableId("storyline-element", document.path),
     category,
     title,
+    ...optionalString("description", descriptionFor(category, frontmatter, document.content)),
     sourcePath: document.path,
     chapter,
     ...optionalNumber("act", frontmatter.act),
     ...optionalNumber("sequence", frontmatter.sequence),
     ...optionalString("notesFile", frontmatter.notesFile),
-    ...optionalList("characters", frontmatter.characters),
+    ...optionalList("characters", uniqueStrings([
+      ...(frontmatter.characters ?? []),
+      ...(frontmatter.pov ? [frontmatter.pov] : []),
+    ])),
     ...optionalList("locations", [
       ...(frontmatter.locations ?? []),
       ...(frontmatter.location ? [frontmatter.location] : []),
     ]),
+    ...optionalString("status", frontmatter.status),
   };
+}
+
+function findProjectMetadata(documents: readonly StoryLineSourceDocument[]): StoryLineFrontmatter {
+  for (const document of documents) {
+    if (!document.path.toLowerCase().endsWith(".md")) continue;
+    const frontmatter = readFrontmatter(document.content);
+    if (frontmatter.type?.toLowerCase() === "storyline") return frontmatter;
+  }
+  return {};
 }
 
 function categoryFromPath(relativePath: string): StoryLineCategory | null {
@@ -85,6 +119,7 @@ function categoryFromType(value: string | undefined): StoryLineCategory | null {
 
 interface StoryLineFrontmatter {
   type?: string;
+  language?: string;
   title?: string;
   name?: string;
   chapter?: string;
@@ -92,8 +127,19 @@ interface StoryLineFrontmatter {
   sequence?: string;
   notesFile?: string;
   characters?: string[];
+  pov?: string;
   location?: string;
   locations?: string[];
+  status?: string;
+  description?: string;
+  subtitle?: string;
+  role?: string;
+  appearance?: string;
+  seriesId?: string;
+  actLabels?: Record<string, string>;
+  actDescriptions?: Record<string, string>;
+  chapterLabels?: Record<string, string>;
+  chapterDescriptions?: Record<string, string>;
 }
 
 function readFrontmatter(content: string): StoryLineFrontmatter {
@@ -101,16 +147,26 @@ function readFrontmatter(content: string): StoryLineFrontmatter {
   if (!block) return {};
   const scalars: Record<string, string> = {};
   const lists: Record<string, string[]> = {};
+  const maps: Record<string, Record<string, string>> = {};
   let activeList: string | null = null;
+  let activeMap: string | null = null;
   for (const line of block.split("\n")) {
     const listItem = /^\s+-\s+(.+?)\s*$/.exec(line)?.[1];
     if (listItem && activeList) {
       (lists[activeList] ??= []).push(cleanYamlScalar(listItem));
       continue;
     }
+    const mapItem = /^\s+["']?([^"':]+)["']?:\s*(.+?)\s*$/.exec(line);
+    if (mapItem && activeMap) {
+      const mapKey = mapItem[1]?.trim();
+      const mapValue = mapItem[2];
+      if (mapKey && mapValue) (maps[activeMap] ??= {})[mapKey] = cleanYamlScalar(mapValue);
+      continue;
+    }
     const match = /^([A-Za-zÄÖÜäöü_-]+):\s*(.*?)\s*$/.exec(line);
     if (!match) {
       activeList = null;
+      activeMap = null;
       continue;
     }
     const key = match[1]?.toLowerCase();
@@ -118,14 +174,18 @@ function readFrontmatter(content: string): StoryLineFrontmatter {
     if (!key) continue;
     if (!value) {
       activeList = key;
+      activeMap = key;
       lists[key] ??= [];
+      maps[key] ??= {};
       continue;
     }
     activeList = null;
+    activeMap = null;
     scalars[key] = cleanYamlScalar(value);
   }
   return {
     ...optionalString("type", scalars.type ?? scalars.typ),
+    ...optionalString("language", scalars.language ?? scalars.sprache),
     ...optionalString("title", scalars.title ?? scalars.titel),
     ...optionalString("name", scalars.name),
     ...optionalString("chapter", scalars.chapter ?? scalars.kapitel),
@@ -133,9 +193,41 @@ function readFrontmatter(content: string): StoryLineFrontmatter {
     ...optionalString("sequence", scalars.sequence),
     ...optionalString("notesFile", normalizeLinkTarget(scalars.notesfile)),
     ...optionalList("characters", normalizeLinkTargets(lists.characters)),
+    ...optionalString("pov", normalizeLinkTarget(scalars.pov)),
     ...optionalString("location", normalizeLinkTarget(scalars.location)),
     ...optionalList("locations", normalizeLinkTargets(lists.locations)),
+    ...optionalString("status", scalars.status),
+    ...optionalString("description", scalars.description ?? scalars.beschreibung),
+    ...optionalString("subtitle", scalars.subtitle ?? scalars.untertitel),
+    ...optionalString("role", scalars.role ?? scalars.rolle),
+    ...optionalString("appearance", scalars.appearance ?? scalars.aussehen),
+    ...optionalString("seriesId", scalars.seriesid),
+    ...optionalMap("actLabels", maps.actlabels),
+    ...optionalMap("actDescriptions", maps.actdescriptions),
+    ...optionalMap("chapterLabels", maps.chapterlabels),
+    ...optionalMap("chapterDescriptions", maps.chapterdescriptions),
   };
+}
+
+function descriptionFor(
+  category: StoryLineCategory,
+  frontmatter: StoryLineFrontmatter,
+  content: string,
+): string | undefined {
+  if (frontmatter.description) return frontmatter.description;
+  if (category === "scenes") return frontmatter.subtitle;
+  if (category === "characters") return frontmatter.appearance ?? frontmatter.role;
+  if (category === "sceneNotes") return firstBodyParagraph(content);
+  return undefined;
+}
+
+function firstBodyParagraph(content: string): string | undefined {
+  const body = content.replace(/^---\s*\n[\s\S]*?\n---(?:\s*\n|$)/, "");
+  const paragraph = body
+    .split(/\n\s*\n/)
+    .map((part) => part.replace(/^#{1,6}\s+.*$/gm, "").trim())
+    .find(Boolean);
+  return paragraph?.replace(/\s+/g, " ");
 }
 
 function cleanYamlScalar(value: string): string {
@@ -153,6 +245,11 @@ function cleanYamlScalar(value: string): string {
 function normalizeLinkTargets(values: string[] | undefined): string[] | undefined {
   if (!values) return undefined;
   return values.map(normalizeLinkTarget).filter((value): value is string => Boolean(value));
+}
+
+function uniqueStrings(values: string[]): string[] | undefined {
+  const unique = [...new Set(values)];
+  return unique.length > 0 ? unique : undefined;
 }
 
 function normalizeLinkTarget(value: string | undefined): string | undefined {
@@ -174,6 +271,15 @@ function optionalNumber<Key extends string>(key: Key, value: string | undefined)
 
 function optionalList<Key extends string>(key: Key, value: string[] | undefined): Partial<Record<Key, string[]>> {
   return value && value.length > 0 ? { [key]: value } as Record<Key, string[]> : {};
+}
+
+function optionalMap<Key extends string>(
+  key: Key,
+  value: Record<string, string> | undefined,
+): Partial<Record<Key, Record<string, string>>> {
+  return value && Object.keys(value).length > 0
+    ? { [key]: value } as Record<Key, Record<string, string>>
+    : {};
 }
 
 function firstHeading(content: string): string | null {

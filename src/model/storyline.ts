@@ -4,6 +4,7 @@ export interface StoryLineElement {
   id: string;
   category: StoryLineCategory;
   title: string;
+  description?: string;
   sourcePath: string;
   chapter: string | null;
   act?: number;
@@ -11,12 +12,27 @@ export interface StoryLineElement {
   notesFile?: string;
   characters?: string[];
   locations?: string[];
+  status?: string;
 }
 
 export interface StoryLineProject {
   name: string;
+  language?: string;
+  vaultName?: string;
+  seriesName?: string;
+  bookNumber?: number;
   rootPath: string;
   elements: StoryLineElement[];
+  actLabels: Record<string, string>;
+  actDescriptions: Record<string, string>;
+  chapterLabels: Record<string, string>;
+  chapterDescriptions: Record<string, string>;
+}
+
+export interface StoryLineSeriesContext {
+  vaultName?: string;
+  seriesName?: string;
+  bookNumber?: number;
 }
 
 export const CATEGORY_LABELS: Record<StoryLineCategory, string> = {

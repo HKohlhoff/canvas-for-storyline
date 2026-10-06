@@ -6,3 +6,6 @@ data.json
 .DS_Store
 _local/
 .obsidian/
+!examples/demo-vault/.obsidian/
+examples/demo-vault/.obsidian/*
+!examples/demo-vault/.obsidian/community-plugins.json

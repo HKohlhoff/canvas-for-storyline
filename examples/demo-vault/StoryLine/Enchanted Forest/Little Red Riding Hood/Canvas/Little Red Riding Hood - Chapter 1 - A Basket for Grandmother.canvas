@@ -1,0 +1,153 @@
+{
+  "nodes": [
+    {
+      "id": "621c4874ee5c1a97",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 1 - A Basket for Grandmother &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "6f56e497325ff2a7",
+      "type": "group",
+      "label": "Chapter 1 · A Basket for Grandmother",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 760
+    },
+    {
+      "id": "3a9b61ee581377df",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "1df30f765774f22b",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "f20d097be1c86bae",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "17287eed16410540",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 600
+    },
+    {
+      "id": "cfs-card-c13fe0075d5648c7",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 1/01-01 The Errand.md",
+      "color": "#9E9E9E",
+      "cfsDescription": "Mother sends Little Red Riding Hood to the ailing Grandmother with cake and juice.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-5d1dca2303127f3f",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/The Errand - Notes.md",
+      "color": "2",
+      "cfsDescription": "The basket represents care; the promise introduces the story's central rule. While writing, use the aroma of the cake and the red hood as sensory details.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-dfa966797d45ba7d",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-d48ab9aa3a587f9c",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Mother.md",
+      "color": "6",
+      "cfsDescription": "A capable woman with pinned-up hair and an embroidered apron.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-89f8493b54a9a7f3",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Mother's House.md",
+      "color": "5",
+      "cfsDescription": "A bright half-timbered house at the village edge, with a kitchen, an orchard, and a view of the forest path.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "4c1d5f205ac9def3",
+      "fromNode": "cfs-card-c13fe0075d5648c7",
+      "toNode": "cfs-card-5d1dca2303127f3f",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "ac00de3eead939a1",
+      "fromNode": "cfs-card-c13fe0075d5648c7",
+      "toNode": "cfs-card-dfa966797d45ba7d",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "5f7d3bc93bc1cefc",
+      "fromNode": "cfs-card-c13fe0075d5648c7",
+      "toNode": "cfs-card-d48ab9aa3a587f9c",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "faea73f065b401df",
+      "fromNode": "cfs-card-c13fe0075d5648c7",
+      "toNode": "cfs-card-89f8493b54a9a7f3",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 1 - A Basket for Grandmother"
+}

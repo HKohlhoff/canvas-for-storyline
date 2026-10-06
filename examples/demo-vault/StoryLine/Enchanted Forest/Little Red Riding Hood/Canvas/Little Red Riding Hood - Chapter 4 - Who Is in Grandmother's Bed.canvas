@@ -1,0 +1,172 @@
+{
+  "nodes": [
+    {
+      "id": "5f1c43bbe35c0946",
+      "type": "text",
+      "text": "# Book 1 - Little Red Riding Hood - Chapter 4 - Who Is in Grandmother's Bed? &emsp;<small>(back to: **[[StoryLine/Enchanted Forest/Little Red Riding Hood/Canvas/Little Red Riding Hood - Overview.canvas|Canvas]]**)</small>\n\n> [!info] StoryLine color code\n> $\\textcolor{#9E9E9E}{\\textsf{Gray}}$ – Idea - $\\textcolor{#2196F3}{\\textsf{Blue}}$ – Outlined - $\\textcolor{#FF9800}{\\textsf{Orange}}$ – Draft - $\\textcolor{#4CAF50}{\\textsf{Green}}$ – Written - $\\textcolor{#9C27B0}{\\textsf{Purple}}$ – Revised - $\\textcolor{#F44336}{\\textsf{Red}}$ – Final",
+      "x": 0,
+      "y": 0,
+      "width": 2560,
+      "height": 200
+    },
+    {
+      "id": "6a56dcb82d5feac8",
+      "type": "group",
+      "label": "Chapter 4 · Who Is in Grandmother's Bed?",
+      "color": "4",
+      "x": 0,
+      "y": 290,
+      "width": 2560,
+      "height": 1040
+    },
+    {
+      "id": "6b1059b7c575257c",
+      "type": "group",
+      "label": "Scenes",
+      "color": "4",
+      "x": 80,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "6528780b94e1d318",
+      "type": "group",
+      "label": "Scene Notes",
+      "color": "2",
+      "x": 700,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "0eccd80ee6b2b309",
+      "type": "group",
+      "label": "Characters and POV",
+      "color": "6",
+      "x": 1320,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "da9c5e92dfe24ba5",
+      "type": "group",
+      "label": "Locations",
+      "color": "5",
+      "x": 1940,
+      "y": 370,
+      "width": 540,
+      "height": 880
+    },
+    {
+      "id": "cfs-card-ab5a55ff9578bd75",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/Scenes/Act 2/02-04 The Voice in the Bed.md",
+      "color": "#4CAF50",
+      "cfsDescription": "In the darkened room, Little Red Riding Hood asks the decisive questions.",
+      "x": 120,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-53df228377c51ab7",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Little Red Riding Hood/SceneNotes/The Voice in the Bed - Notes.md",
+      "color": "2",
+      "cfsDescription": "The familiar questions form an escalation: ears, eyes, hands, mouth. Light, voice, and smell give Little Red Riding Hood warning signs that she connects only when it is too late.",
+      "x": 740,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-397a89c4bd557ae8",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Little Red Riding Hood.md",
+      "color": "6",
+      "cfsDescription": "A curious child with a striking red velvet hood and a woven basket.",
+      "x": 1360,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-8d529772e47fe158",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Wolf.md",
+      "color": "6",
+      "cfsDescription": "A large gray wolf with yellow eyes, a calm voice, and strikingly polite manners.",
+      "x": 1360,
+      "y": 690,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-9bbe839e87ff212c",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Characters/Grandmother.md",
+      "color": "6",
+      "cfsDescription": "An older woman with silver hair, a white nightcap, and a warm wool jacket.",
+      "x": 1360,
+      "y": 970,
+      "width": 460,
+      "height": 240
+    },
+    {
+      "id": "cfs-card-4e561cdf1950f15b",
+      "type": "file",
+      "file": "StoryLine/Enchanted Forest/Codex/Locations/Enchanted Forest/Grandmother's House.md",
+      "color": "5",
+      "cfsDescription": "A small house beneath three oaks at the forest's edge, with a living kitchen and a darkened bedroom.",
+      "x": 1980,
+      "y": 410,
+      "width": 460,
+      "height": 240
+    }
+  ],
+  "edges": [
+    {
+      "id": "6f21303d17e99bd4",
+      "fromNode": "cfs-card-ab5a55ff9578bd75",
+      "toNode": "cfs-card-53df228377c51ab7",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "2"
+    },
+    {
+      "id": "b97e01727a089e17",
+      "fromNode": "cfs-card-ab5a55ff9578bd75",
+      "toNode": "cfs-card-397a89c4bd557ae8",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "23bed41018a21eb7",
+      "fromNode": "cfs-card-ab5a55ff9578bd75",
+      "toNode": "cfs-card-8d529772e47fe158",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "916fb5a4a8c6b6a3",
+      "fromNode": "cfs-card-ab5a55ff9578bd75",
+      "toNode": "cfs-card-9bbe839e87ff212c",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "6"
+    },
+    {
+      "id": "640bd9d10952e058",
+      "fromNode": "cfs-card-ab5a55ff9578bd75",
+      "toNode": "cfs-card-4e561cdf1950f15b",
+      "fromSide": "right",
+      "toSide": "left",
+      "color": "5"
+    }
+  ],
+  "name": "Chapter 4 - Who Is in Grandmother's Bed?"
+}

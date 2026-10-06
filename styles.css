@@ -1,0 +1,39 @@
+.cfs-description-tooltip {
+  background: var(--background-primary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-s);
+  color: var(--text-normal);
+  display: none;
+  font-size: var(--font-ui-small);
+  font-weight: var(--font-normal);
+  line-height: var(--line-height-normal);
+  max-width: min(520px, calc(100vw - 24px));
+  padding: 10px 12px;
+  pointer-events: none;
+  position: fixed;
+  white-space: normal;
+  z-index: var(--layer-popover, 1000);
+}
+
+.cfs-description-tooltip.is-visible {
+  display: block;
+}
+
+.canvas-for-storyline-documentation-modal {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.canvas-for-storyline-documentation-modal .modal-content {
+  max-height: min(72vh, 760px);
+  overflow-y: auto;
+}
+
+.canvas-for-storyline-documentation-actions {
+  background: var(--background-primary);
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0 4px;
+  position: sticky;
+}
