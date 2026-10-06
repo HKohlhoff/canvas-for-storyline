@@ -16,6 +16,9 @@ if (manifest.id !== "canvas-for-storyline") errors.push("Unexpected plugin id.")
 if (manifest.name !== "Canvas for StoryLine") errors.push("Unexpected plugin name.");
 if (manifest.version !== pkg.version) errors.push("Manifest and package versions differ.");
 if (versions[manifest.version] !== manifest.minAppVersion) errors.push("versions.json does not match manifest.");
+if (process.env.EXPECTED_RELEASE_TAG && process.env.EXPECTED_RELEASE_TAG !== manifest.version) {
+  errors.push("Release tag does not match manifest version.");
+}
 if (manifest.isDesktopOnly !== false) errors.push("Plugin must not be desktop-only.");
 if (pkg.license !== "GPL-3.0-or-later") errors.push("Unexpected license.");
 if (!copyingException.includes("Additional permission under GNU GPL version 3 section 7")) {
@@ -36,6 +39,12 @@ if (!readme.includes("https://github.com/HKohlhoff/canvas-folding")) {
 if (!readme.includes("https://github.com/HKohlhoff/canvas-html-exporter")) {
   errors.push("README does not link Canvas HTML Exporter.");
 }
+const sourceFiles = fs.readdirSync("src", { recursive: true })
+  .filter((path) => typeof path === "string" && path.endsWith(".ts"));
+const sourceText = sourceFiles.map((path) => fs.readFileSync(`src/${path}`, "utf8")).join("\n");
+for (const api of ["getAllLoadedFiles(", "getFiles(", "getMarkdownFiles("]) {
+  if (sourceText.includes(api)) errors.push(`Source must not enumerate the complete vault with ${api}`);
+}
 if (!lastUpdate.startsWith(`# Canvas for StoryLine ${manifest.version}\n`)) {
   errors.push("Last Update.md does not name the manifest version.");
 }
@@ -43,6 +52,7 @@ if (!updateNoteSource.includes(`CURRENT_UPDATE_VERSION = "${manifest.version}"`)
   errors.push("The embedded update note does not name the manifest version.");
 }
 if (
+  !settingsSource.includes("getSettingDefinitions()") ||
   !settingsSource.includes("SHOW_LAST_UPDATE_LABEL") ||
   !settingsSource.includes("showLastUpdate()") ||
   !settingsSource.includes('setButtonText("Show readme")') ||

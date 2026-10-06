@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.8.1
+
+- Adopt Obsidian's declarative settings API so all plugin settings appear in
+  settings search on Obsidian 1.13 and later.
+- Replace the folder chooser's complete-vault enumeration with recursive,
+  folder-only traversal while retaining the explicit **Choose** buttons.
+  StoryLine content reads remain limited to the selected project and its
+  parent-series Codex.
+- Build, test, attest, and upload release assets through GitHub Actions so
+  users and the Obsidian Community directory can verify their provenance.
+
 ## 0.8.0
 
 - Add the initial Obsidian plugin lifecycle and settings.

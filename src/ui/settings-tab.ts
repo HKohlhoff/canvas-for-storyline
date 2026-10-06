@@ -1,121 +1,206 @@
-import { PluginSettingTab, Setting, type App, type TextComponent } from "obsidian";
+import {
+  PluginSettingTab,
+  type App,
+  type SettingDefinition,
+  type SettingDefinitionItem,
+  type TextComponent,
+} from "obsidian";
 import type CanvasForStoryLinePlugin from "../main";
-import { CATEGORY_LABELS, type StoryLineCategory } from "../model/storyline";
+import { CATEGORY_LABELS } from "../model/storyline";
 import { VaultFolderSuggestModal } from "./vault-folder-suggest-modal";
 import {
   SHOW_LAST_UPDATE_DESCRIPTION,
   SHOW_LAST_UPDATE_LABEL,
 } from "../update-note-content";
 
+type SettingKey =
+  | "projectPath"
+  | "includeScenes"
+  | "includeSceneNotes"
+  | "includeCharacters"
+  | "includeLocations"
+  | "masterOutputPath"
+  | "masterSceneLinkMode"
+  | "createMasterWithCanvases";
+
 export class CanvasForStoryLineSettingTab extends PluginSettingTab {
   constructor(app: App, private readonly plugin: CanvasForStoryLinePlugin) {
     super(app, plugin);
   }
 
-  display(): void {
-    this.containerEl.empty();
-    new Setting(this.containerEl).setName("Canvas files").setHeading();
-    let projectPathInput: TextComponent | null = null;
-    const projectFolderSetting = new Setting(this.containerEl)
-      .setName("StoryLine project folder")
-      .setDesc("Choose a folder inside this vault. Generated files are written to its direct Canvas subfolder.");
-    projectFolderSetting.addText((text) => {
-      projectPathInput = text;
-      text
-        .setPlaceholder("Projects/My Story")
-        .setValue(this.plugin.settings.projectPath)
-        .onChange(async (value) => {
-          this.plugin.settings.projectPath = value;
-          await this.plugin.saveSettings();
-        });
-    });
-    projectFolderSetting.addButton((button) => button
-      .setButtonText("Choose")
-      .setTooltip("Choose a folder from this vault")
-      .onClick(() => {
-        new VaultFolderSuggestModal(this.app, async (path) => {
-          projectPathInput?.setValue(path);
-          this.plugin.settings.projectPath = path;
-          await this.plugin.saveSettings();
-        }, "Choose a StoryLine project folder").open();
-      }));
+  getSettingDefinitions(): SettingDefinitionItem<SettingKey>[] {
+    return [
+      {
+        type: "group",
+        heading: "Canvas files",
+        items: [
+          this.folderSetting(
+            "projectPath",
+            "StoryLine project folder",
+            "Choose a folder inside this vault. Generated files are written to its direct Canvas subfolder.",
+            "Projects/My Story",
+            "Choose a StoryLine project folder",
+          ),
+        ],
+      },
+      {
+        type: "group",
+        heading: "Included StoryLine elements",
+        items: [
+          categoryToggle("includeScenes", "scenes"),
+          categoryToggle("includeSceneNotes", "sceneNotes"),
+          categoryToggle("includeCharacters", "characters"),
+          categoryToggle("includeLocations", "locations"),
+        ],
+      },
+      {
+        type: "group",
+        heading: "Master file",
+        items: [
+          this.folderSetting(
+            "masterOutputPath",
+            "Master output folder",
+            "Choose a folder inside this vault. When empty, Master.md is created in the StoryLine project's Canvas folder.",
+            "Exports/My Story",
+            "Choose the Master output folder",
+          ),
+          {
+            name: "Scene inclusion",
+            desc: "Choose whether Master.md contains ordinary scene links or embeds the complete scene notes.",
+            control: {
+              type: "dropdown",
+              key: "masterSceneLinkMode",
+              defaultValue: "wikilinks",
+              options: {
+                wikilinks: "Wikilinks",
+                embeds: "Embedded notes",
+              },
+            },
+          },
+          {
+            name: "Create master file with Canvas files",
+            desc: "When enabled, the Canvas command also recreates Master.md. The separate master command always recreates it.",
+            control: {
+              type: "toggle",
+              key: "createMasterWithCanvases",
+              defaultValue: true,
+            },
+          },
+        ],
+      },
+      {
+        type: "group",
+        heading: "About",
+        items: [
+          {
+            name: "Last update",
+            desc: SHOW_LAST_UPDATE_DESCRIPTION,
+            render: (setting) => {
+              setting.addButton((button) => button
+                .setButtonText(SHOW_LAST_UPDATE_LABEL)
+                .onClick(() => this.plugin.showLastUpdate()));
+            },
+          },
+          {
+            name: "README",
+            desc: "Open the complete plugin documentation without leaving Obsidian.",
+            render: (setting) => {
+              setting.addButton((button) => button
+                .setButtonText("Show readme")
+                .onClick(() => this.plugin.showReadme()));
+            },
+          },
+        ],
+      },
+    ];
+  }
 
-    new Setting(this.containerEl).setName("Included StoryLine elements").setHeading();
-    for (const category of ["scenes", "sceneNotes", "characters", "locations"] as const) {
-      this.addCategoryToggle(category);
+  getControlValue(key: SettingKey): unknown {
+    switch (key) {
+      case "projectPath": return this.plugin.settings.projectPath;
+      case "includeScenes": return this.plugin.settings.includedCategories.scenes;
+      case "includeSceneNotes": return this.plugin.settings.includedCategories.sceneNotes;
+      case "includeCharacters": return this.plugin.settings.includedCategories.characters;
+      case "includeLocations": return this.plugin.settings.includedCategories.locations;
+      case "masterOutputPath": return this.plugin.settings.masterOutputPath;
+      case "masterSceneLinkMode": return this.plugin.settings.masterSceneLinkMode;
+      case "createMasterWithCanvases": return this.plugin.settings.createMasterWithCanvases;
     }
+  }
 
-    new Setting(this.containerEl).setName("Master file").setHeading();
-    let masterPathInput: TextComponent | null = null;
-    const masterFolderSetting = new Setting(this.containerEl)
-      .setName("Master output folder")
-      .setDesc("Choose a folder inside this vault. When empty, Master.md is created in the StoryLine project's Canvas folder.");
-    masterFolderSetting.addText((text) => {
-      masterPathInput = text;
-      text
-        .setPlaceholder("Exports/My Story")
-        .setValue(this.plugin.settings.masterOutputPath)
-        .onChange(async (value) => {
-          this.plugin.settings.masterOutputPath = value;
-          await this.plugin.saveSettings();
+  async setControlValue(key: SettingKey, value: unknown): Promise<void> {
+    switch (key) {
+      case "projectPath":
+        this.plugin.settings.projectPath = typeof value === "string" ? value : "";
+        break;
+      case "includeScenes":
+        this.plugin.settings.includedCategories.scenes = value === true;
+        break;
+      case "includeSceneNotes":
+        this.plugin.settings.includedCategories.sceneNotes = value === true;
+        break;
+      case "includeCharacters":
+        this.plugin.settings.includedCategories.characters = value === true;
+        break;
+      case "includeLocations":
+        this.plugin.settings.includedCategories.locations = value === true;
+        break;
+      case "masterOutputPath":
+        this.plugin.settings.masterOutputPath = typeof value === "string" ? value : "";
+        break;
+      case "masterSceneLinkMode":
+        this.plugin.settings.masterSceneLinkMode = value === "embeds" ? "embeds" : "wikilinks";
+        break;
+      case "createMasterWithCanvases":
+        this.plugin.settings.createMasterWithCanvases = value === true;
+        break;
+    }
+    await this.plugin.saveSettings();
+  }
+
+  private folderSetting(
+    key: "projectPath" | "masterOutputPath",
+    name: string,
+    desc: string,
+    placeholder: string,
+    chooserPlaceholder: string,
+  ): SettingDefinition<SettingKey> {
+    return {
+      name,
+      desc,
+      render: (setting) => {
+        let textInput: TextComponent | undefined;
+        setting.addText((text) => {
+          textInput = text;
+          text
+            .setPlaceholder(placeholder)
+            .setValue(this.getControlValue(key) as string)
+            .onChange((value) => { void this.setControlValue(key, value); });
         });
-    });
-    masterFolderSetting.addButton((button) => button
-      .setButtonText("Choose")
-      .setTooltip("Choose the Master output folder")
-      .onClick(() => {
-        new VaultFolderSuggestModal(this.app, async (path) => {
-          masterPathInput?.setValue(path);
-          this.plugin.settings.masterOutputPath = path;
-          await this.plugin.saveSettings();
-        }, "Choose the Master output folder").open();
-      }));
-
-    new Setting(this.containerEl)
-      .setName("Scene inclusion")
-      .setDesc("Choose whether Master.md contains ordinary scene links or embeds the complete scene notes.")
-      .addDropdown((dropdown) => dropdown
-        .addOption("wikilinks", "Wikilinks")
-        .addOption("embeds", "Embedded notes")
-        .setValue(this.plugin.settings.masterSceneLinkMode)
-        .onChange(async (value) => {
-          this.plugin.settings.masterSceneLinkMode = value === "embeds" ? "embeds" : "wikilinks";
-          await this.plugin.saveSettings();
-        }));
-
-    new Setting(this.containerEl)
-      .setName("Create master file with Canvas files")
-      .setDesc("When enabled, the Canvas command also recreates Master.md. The separate master command always recreates it.")
-      .addToggle((toggle) => toggle
-        .setValue(this.plugin.settings.createMasterWithCanvases)
-        .onChange(async (value) => {
-          this.plugin.settings.createMasterWithCanvases = value;
-          await this.plugin.saveSettings();
-        }));
-
-    new Setting(this.containerEl).setName("About").setHeading();
-    new Setting(this.containerEl)
-      .setName("Last update")
-      .setDesc(SHOW_LAST_UPDATE_DESCRIPTION)
-      .addButton((button) => button
-        .setButtonText(SHOW_LAST_UPDATE_LABEL)
-        .onClick(() => this.plugin.showLastUpdate()));
-    new Setting(this.containerEl)
-      .setName("README")
-      .setDesc("Open the complete plugin documentation without leaving Obsidian.")
-      .addButton((button) => button
-        .setButtonText("Show readme")
-        .onClick(() => this.plugin.showReadme()));
+        setting.addButton((button) => button
+          .setButtonText("Choose")
+          .setTooltip(chooserPlaceholder)
+          .onClick(() => {
+            new VaultFolderSuggestModal(this.app, async (path) => {
+              textInput?.setValue(path);
+              await this.setControlValue(key, path);
+            }, chooserPlaceholder).open();
+          }));
+      },
+    };
   }
+}
 
-  private addCategoryToggle(category: StoryLineCategory): void {
-    new Setting(this.containerEl)
-      .setName(CATEGORY_LABELS[category])
-      .addToggle((toggle) => toggle
-        .setValue(this.plugin.settings.includedCategories[category])
-        .onChange(async (value) => {
-          this.plugin.settings.includedCategories[category] = value;
-          await this.plugin.saveSettings();
-        }));
-  }
+function categoryToggle(
+  key: Extract<SettingKey, `include${string}`>,
+  category: keyof typeof CATEGORY_LABELS,
+): SettingDefinition<SettingKey> {
+  return {
+    name: CATEGORY_LABELS[category],
+    control: {
+      type: "toggle",
+      key,
+      defaultValue: true,
+    },
+  };
 }
