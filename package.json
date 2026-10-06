@@ -1,6 +1,6 @@
 {
   "name": "canvas-for-storyline",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Turn StoryLine writing projects into connected Obsidian Canvas books and export-ready master notes.",
   "main": "main.js",
   "type": "module",

@@ -11,9 +11,7 @@ export class VaultFolderSuggestModal extends FuzzySuggestModal<TFolder> {
   }
 
   getItems(): TFolder[] {
-    return this.app.vault
-      .getAllLoadedFiles()
-      .filter((file): file is TFolder => file instanceof TFolder && file.path !== "/")
+    return collectFolders(this.app.vault.getRoot())
       .sort((left, right) => left.path.localeCompare(right.path, "en"));
   }
 
@@ -24,4 +22,13 @@ export class VaultFolderSuggestModal extends FuzzySuggestModal<TFolder> {
   onChooseItem(folder: TFolder): void {
     void this.onChoose(folder.path);
   }
+}
+
+function collectFolders(parent: TFolder): TFolder[] {
+  const folders: TFolder[] = [];
+  for (const child of parent.children) {
+    if (!(child instanceof TFolder)) continue;
+    folders.push(child, ...collectFolders(child));
+  }
+  return folders;
 }
