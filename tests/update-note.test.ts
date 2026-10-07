@@ -9,11 +9,10 @@ import {
   SHOW_LAST_UPDATE_LABEL,
 } from "../src/update-note-content";
 
-test("keeps the embedded update note synchronized with release metadata", () => {
-  const manifest = JSON.parse(fs.readFileSync("manifest.json", "utf8")) as { version: string };
-  assert.equal(CURRENT_UPDATE_VERSION, manifest.version);
-  assert.equal(CURRENT_UPDATE_ID, `release-${manifest.version}`);
+test("keeps the 0.8.1 update note unchanged for maintenance releases", () => {
+  assert.equal(CURRENT_UPDATE_VERSION, "0.8.1");
+  assert.equal(CURRENT_UPDATE_ID, "release-0.8.1");
   assert.equal(fs.readFileSync("Last Update.md", "utf8"), `${CURRENT_UPDATE_MARKDOWN}\n`);
   assert.equal(SHOW_LAST_UPDATE_LABEL, "Show last update");
-  assert.match(SHOW_LAST_UPDATE_DESCRIPTION, new RegExp(manifest.version.replaceAll(".", "\\.")));
+  assert.match(SHOW_LAST_UPDATE_DESCRIPTION, /0\.8\.1/);
 });
