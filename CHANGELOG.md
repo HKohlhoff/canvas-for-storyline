@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.2
+
+- Use English labels for all StoryLine category switches in the plugin
+  settings: Scenes, Scene notes, Characters, and Locations.
+
 ## 0.8.1
 
 - Adopt Obsidian's declarative settings API so all plugin settings appear in

@@ -5,15 +5,15 @@
 - [x] `npm test`
 - [x] `npm run build:prod`
 - [x] Release contains only `main.js`, `manifest.json`, and `styles.css`.
-- [x] Manifest, package, and `versions.json` all name version `0.8.1`.
+- [x] Manifest, package, and `versions.json` all name version `0.8.2`.
 - [x] Release workflow builds, tests, attests, and uploads all three release
   assets from the version tag.
 - [x] Source code does not use complete-vault enumeration APIs.
 - [x] Settings use Obsidian's declarative API; folder choosers traverse only
   folders and retain explicit **Choose** buttons.
-- [x] Embedded update text, update ID, displayed version, `Last Update.md`,
-  settings entries, embedded README source, and manifest version are
-  synchronized.
+- [x] Embedded update text, update ID, displayed version, and `Last Update.md`
+  intentionally remain on 0.8.1; settings entries and embedded README source
+  remain synchronized.
 
 ## Manual test vault
 
@@ -21,9 +21,8 @@
 - [ ] Plugin loads and unloads without console errors.
 - [ ] Settings persist after restart.
 - [ ] Every plugin setting can be found through Obsidian's settings search.
-- [ ] Version 0.8.1 shows its update note once after installation or upgrade;
-  closing it stores the version-bound read marker, creates no Vault file, and
-  prevents another automatic display on restart.
+- [ ] Updating to 0.8.2 does not reopen the 0.8.1 update note for users who
+  have already dismissed it.
 - [ ] **Show last update** remains at the bottom of the settings and reopens the
   current note.
 - [ ] The final **About** settings section lists **Last update** followed by

@@ -47,11 +47,11 @@ const sourceText = sourceFiles.map((path) => fs.readFileSync(`src/${path}`, "utf
 for (const api of ["getAllLoadedFiles(", "getFiles(", "getMarkdownFiles("]) {
   if (sourceText.includes(api)) errors.push(`Source must not enumerate the complete vault with ${api}`);
 }
-if (!lastUpdate.startsWith(`# Canvas for StoryLine ${manifest.version}\n`)) {
-  errors.push("Last Update.md does not name the manifest version.");
+if (!lastUpdate.startsWith("# Canvas for StoryLine 0.8.1\n")) {
+  errors.push("Last Update.md must remain on version 0.8.1 for this maintenance release.");
 }
-if (!updateNoteSource.includes(`CURRENT_UPDATE_VERSION = "${manifest.version}"`)) {
-  errors.push("The embedded update note does not name the manifest version.");
+if (!updateNoteSource.includes('CURRENT_UPDATE_VERSION = "0.8.1"')) {
+  errors.push("The embedded update note must remain on version 0.8.1 for this maintenance release.");
 }
 if (
   !settingsSource.includes("getSettingDefinitions()") ||
