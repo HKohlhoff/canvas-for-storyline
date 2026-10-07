@@ -36,8 +36,8 @@ export interface StoryLineSeriesContext {
 }
 
 export const CATEGORY_LABELS: Record<StoryLineCategory, string> = {
-  scenes: "Szenen",
-  sceneNotes: "Szenen-Notizen",
-  characters: "Figuren",
-  locations: "Orte",
+  scenes: "Scenes",
+  sceneNotes: "Scene notes",
+  characters: "Characters",
+  locations: "Locations",
 };

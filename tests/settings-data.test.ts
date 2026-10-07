@@ -1,6 +1,16 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { normalizeSettings } from "../src/settings-data";
+import { CATEGORY_LABELS } from "../src/model/storyline";
+
+test("uses English category labels in the plugin settings", () => {
+  assert.deepEqual(CATEGORY_LABELS, {
+    scenes: "Scenes",
+    sceneNotes: "Scene notes",
+    characters: "Characters",
+    locations: "Locations",
+  });
+});
 
 test("normalizes project paths and migrates missing category flags", () => {
   assert.deepEqual(normalizeSettings({
